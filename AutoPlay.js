@@ -5,7 +5,8 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
-// @version     1
+// @updateURL   http://matthewmarillac.com/api/meta.js
+// @version     2
 // @grant       none
 // ==/UserScript==
 var videoPlaceholder = document.getElementById('divContentVideo');
