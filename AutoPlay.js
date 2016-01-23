@@ -6,7 +6,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   http://matthewmarillac.com/api/meta.js
-// @version     1
+// @version     3
 // @grant       none
 // ==/UserScript==
 var Url; 
