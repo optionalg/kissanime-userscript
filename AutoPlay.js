@@ -6,7 +6,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   http://matthewmarillac.com/api/meta.js
-// @version     3
+// @version     5
 // @grant       none
 // ==/UserScript==
 var Url; 
@@ -55,6 +55,7 @@ function getNextUrl(currentUrl)
     {//this is the first video in the que - get the next page from current page link
         var element = document.getElementById('btnNext').parentNode;
         console.log("Next Url: " + element.href);
+        history.pushState({}, '', element.href);
         Url = element.href; 
         nextVideo(element.href);
     }
@@ -70,6 +71,7 @@ function getNextUrl(currentUrl)
                 var select = jQuery(response).find('img#btnNext').parent();
                 nextUrl = jQuery(select).attr("href");
                 console.log("Next Url: " + nextUrl);
+                history.pushState({}, '', jQuery(select).attr("href"));
                 Url = nextUrl;
                 nextVideo(nextUrl);
             },
@@ -80,4 +82,5 @@ function getNextUrl(currentUrl)
          });
          
     }
+    
 }
