@@ -15,19 +15,21 @@ var Url;
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
 
-  jQuery(video).on('ended',function()
-  {     //once video ended
-      Console.Log("Kiss Anime Auto Play");
-      var element = document.getElementById('btnNext').parentNode;
-        if(Url == "" || Url == null)
-        {   //if this is the first url in que get the first video link and src
-            getNextUrl("init");
-        }
-        else
-        {   //otherwise we move foward with previous ajax requested page
-            getNextUrl(Url); 
-        }
-  });
+$(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif');
+
+jQuery(video).on('ended',function()
+{     //once video ended
+    Console.Log("Kiss Anime Auto Play");
+    var element = document.getElementById('btnNext').parentNode;
+    if(Url == "" || Url == null)
+    {   //if this is the first url in que get the first video link and src
+        getNextUrl("init");
+    }
+    else
+    {   //otherwise we move foward with previous ajax requested page
+        getNextUrl(Url); 
+    }
+});
 
 function nextVideo(url){
  // request video URL
@@ -80,7 +82,5 @@ function getNextUrl(currentUrl)
             console.log(error);
             }
          });
-         
     }
-    
 }

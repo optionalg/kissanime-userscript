@@ -4,19 +4,21 @@ var Url;
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
 
-  $(video).on('ended',function()
-  {     //once video ended
-      console.log("Kiss Anime Auto Play");
-      var element = document.getElementById('btnNext').parentNode;
-        if(Url == "" || Url == null)
-        {   //if this is the first url in que get the first video link and src
-            getNextUrl("init");
-        }
-        else
-        {   //otherwise we move foward with previous ajax requested page
-            getNextUrl(Url); 
-        }
-  });
+$(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif');
+
+$(video).on('ended',function()
+{     //once video ended
+    console.log("Kiss Anime Auto Play");
+    var element = document.getElementById('btnNext').parentNode;
+    if(Url == "" || Url == null)
+    {   //if this is the first url in que get the first video link and src
+        getNextUrl("init");
+    }
+    else
+    {   //otherwise we move foward with previous ajax requested page
+        getNextUrl(Url); 
+    }
+});
 
 function nextVideo(url){
  // request video URL
@@ -28,7 +30,7 @@ function nextVideo(url){
         success: function (response) 
         {
             var select = $(response).find('#selectQuality option')[0];
-           // console.log("Next Video Src: " + asp.wrap($(select).val()));
+            console.log("Next Video Src: " + window.atob($(select).val()));
             video.src = window.atob($(select).val());
         },
         error: function (xhr, status, error) {
@@ -69,7 +71,5 @@ function getNextUrl(currentUrl)
             console.log(error);
             }
          });
-         
     }
-    
 }
