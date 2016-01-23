@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "KissAnime.to AutoPlay",
   "version": "1.0",
-  "description": "Automatically plays the next Anime in the list without ever leaving fullscreen!",
+  "description": "Automatically plays the next Anime in the list without ever leaving fullscreen mode!",
   "author": "Matthew de Marillac",
   "icons": {
       "16": "icons/16.png",
@@ -28,5 +28,4 @@
     "scripts": ["bootstrap.js"],
     "persistent": false
   }
-  
 }

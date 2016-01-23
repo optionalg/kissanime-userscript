@@ -31,6 +31,18 @@ jQuery(video).on('ended',function()
     }
 });
 
+$("body").keydown(function(event) {     //when user clicks left or right key navigate back and foward
+  var element;
+  if (event.which == 39) {
+      element = document.getElementById('btnNext').parentNode;
+      window.location = element;
+  }
+  if (event.which == 37) {
+      element = document.getElementById('btnPrevious').parentNode; 
+      window.location = element;
+  }
+});
+
 function nextVideo(url){
  // request video URL
     console.log("Searching for video at: " + url);
