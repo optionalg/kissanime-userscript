@@ -2,28 +2,30 @@
   "manifest_version": 2,
   "name": "KissAnime.to AutoPlay",
   "version": "1.0",
-  "description": "Automatically plays the next Anime in the list without ever leaving fullscreen mode!",
+  "description": "Automatically plays the next video in the list without ever leaving fullscreen mode!",
   "author": "Matthew de Marillac",
   "icons": {
       "16": "icons/16.png",
+      "19": "icons/19.png",
       "32": "icons/32.png",
+      "38": "icons/76.png",
       "48": "icons/48.png",
       "128": "icons/128.png"
    },
-  "permissions": ["tabs", "activeTab"],
+  "permissions": ["activeTab"],
   "page_action": {
-    "default_title": "KissAnime Autoplay"
+    "default_title": "KissAnime.to Autoplay"
     },
     "content_scripts": [
     {
 
-      "matches": ["*://*.kissanime.to/*"],
+      "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
       "js": ["jquery-1.7.1.min.js", "AutoPlay.js"]
     }
   ],
   "background": {
   "matches": [
-        "*://*.kissanime.to/*"
+        "*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"
     ],
     "scripts": ["bootstrap.js"],
     "persistent": false
