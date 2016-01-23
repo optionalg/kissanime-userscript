@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "KissAnime AutoPlay",
+  "version": "1.0",
+  "description": "Automaticly plays the next anime",
+  "permissions": ["tabs", "activeTab"],
+  "page_action": {
+    "default_title": "KissAnime Autoplay"
+    },
+    "content_scripts": [
+    {
+
+      "matches": ["*://*.kissanime.to/*"],
+      "js": ["jquery-1.7.1.min.js", "AutoPlay.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["bootstrap.js"],
+    "persistent": false
+  }
+  
+}
