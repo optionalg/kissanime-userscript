@@ -3,8 +3,10 @@
 var Url; //global variables
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
-    
-$(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif');
+      
+$(video).on('canplay', function (event) {
+$(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
+});
 
 $(video).on('ended',function()
 {     //once video ended

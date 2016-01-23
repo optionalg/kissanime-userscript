@@ -1,9 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "KissAnime.to AutoPlay",
+  "name": "__MSG_appName__",
   "version": "1.0",
-  "description": "Automatically plays the next video in the list without ever leaving fullscreen mode!",
+  "description": "__MSG_appDesc__",
   "author": "Matthew de Marillac",
+  "default_locale": "en",
   "icons": {
       "16": "icons/16.png",
       "19": "icons/19.png",
@@ -14,11 +15,10 @@
    },
   "permissions": ["activeTab"],
   "page_action": {
-    "default_title": "KissAnime.to Autoplay"
+    "default_title": "__MSG_appName__"
     },
     "content_scripts": [
     {
-
       "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
       "js": ["jquery-1.7.1.min.js", "AutoPlay.js"]
     }
