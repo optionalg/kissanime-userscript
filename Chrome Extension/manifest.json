@@ -1,8 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "KissAnime AutoPlay",
+  "name": "KissAnime.to AutoPlay",
   "version": "1.0",
-  "description": "Automaticly plays the next anime",
+  "description": "Automatically plays the next Anime in the list without ever leaving fullscreen!",
+  "author": "Matthew de Marillac",
+  "icons": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+   },
   "permissions": ["tabs", "activeTab"],
   "page_action": {
     "default_title": "KissAnime Autoplay"
@@ -15,6 +22,9 @@
     }
   ],
   "background": {
+  "matches": [
+        "*://*.kissanime.to/*"
+    ],
     "scripts": ["bootstrap.js"],
     "persistent": false
   }
