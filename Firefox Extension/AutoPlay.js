@@ -1,18 +1,3 @@
-// ==UserScript==
-// @name        KissAnime Auto Play Next Episode
-// @description Automatically plays the next video in the list without ever leaving fullscreen mode! Works on Kissanime/kisscartoon/kissasian
-// @icon        https://github.com/mattd360/kissanime-userscript/blob/master/Chrome%20Extension/icons/128.png?raw=true
-// @locale      en 
-// @namespace   matthewmarillac.com
-// @author      Matthew James de Marillac
-// @include     *://kissanime.com/*
-// @include     *://kisscartoon.me/*
-// @include     *://kissanime.to/*
-// @include     *://kissasian.com/*
-// @updateURL   http://matthewmarillac.com/api/meta.js
-// @version     1.1
-// @grant       none
-// ==/UserScript==
 //Copyright 2016 Matthew de Marillac
 //Kissanime AutoPlayer
 var Url; //global variables
@@ -22,7 +7,7 @@ var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element vi
 $(video).on('canplay', function (event) {       //when viddeo is ready to play add poster - prevents overlaping with default initial loading icon
 $(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
 });
-s
+
 $(video).on('ended',function()
 {     //once video ended
     console.log("Kiss Anime Auto Play");

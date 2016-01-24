@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+  "name": "Kissanime Fullscreen - Auto-Play Next Video",
+  "version": "1.0",
+  "description": "Automatically plays the next video in the list without ever leaving fullscreen mode!",
+  "icons": {
+    "16": "icons/16.png",
+      "19": "icons/19.png",
+      "32": "icons/32.png",
+      "38": "icons/76.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+  },
+
+  "applications": {
+    "gecko": {
+      "id": "kissanimeautoplay@mozilla.org",
+      "strict_min_version": "45.0.0"
+    }
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
+      "js": ["jquery-1.7.1.min.js", "AutoPlay.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["bootstrap.js"],
+}
+}
