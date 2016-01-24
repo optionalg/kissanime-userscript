@@ -4,7 +4,7 @@ var Url; //global variables
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
       
-$(video).on('canplay', function (event) {
+$(video).on('canplay', function (event) {       //when viddeo is ready to play add poster - prevents overlaping with default initial loading icon
 $(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
 });
 
@@ -46,6 +46,7 @@ function nextVideo(url){
             var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
             console.log("Next Video Src: " + window.atob($(select).val()));
             video.src = window.atob($(select).val());       //base 64 decode extracted url and play src
+            document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
         },
         error: function (xhr, status, error) {
             // error in ajax
