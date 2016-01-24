@@ -8,6 +8,6 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @downloadURL   http://matthewmarillac.com/api/AutoPlay.js
-// @version     5
+// @version     1.1
 // @grant       none
 // ==/UserScript==
