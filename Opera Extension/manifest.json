@@ -1,32 +1,23 @@
 {
   "manifest_version": 2,
   "name": "Kissanime Fullscreen - Auto-Play Next Video",
-  "version": "1.0",
+  "version": "1.11",
   "description": "Automatically plays the next video in the list without ever leaving fullscreen mode!",
   "author": "Matthew de Marillac",
   "icons": {
       "16": "icons/16.png",
-      "19": "icons/19.png",
-      "32": "icons/32.png",
-      "38": "icons/76.png",
       "48": "icons/48.png",
       "128": "icons/128.png"
    },
-  "permissions": ["activeTab", "https://kissanime.to", "https://kisscartoon.me/", "https://kissasian.com/", "http://www.matthewmarillac.com/api/loading.gif"],
+  "permissions": ["*://*.kissanime.to/anime/*", "*://*.kisscartoon.me/cartoon/*", "*://*.kissasian.com/drama*"],
+  "web_accessible_resources":["icons/loading.gif"],
   "page_action": {
     "default_title": "Kissanime Fullscreen - Auto-Play Next Video"
     },
     "content_scripts": [
     {
-      "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*", "*://*.matthewmarillac.com/*"],
+      "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
       "js": ["jquery-1.7.1.min.js", "AutoPlay.js"]
     }
-  ],
-  "background": {
-  "matches": [
-        "*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*, *://*.matthewmarillac.com/*"
-    ],
-    "scripts": ["bootstrap.js"],
-    "persistent": false
-  }
+  ]
 }
