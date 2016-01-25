@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+
+    <em:id>kissanimeautoplay@mozilla.org</em:id>
+    <em:version>1.0</em:version>
+    <em:type>2</em:type>
+
+	<!-- Front End Metadata -->
+
+    <em:name>Kissanime Fullscreen - Auto-Play Next Video</em:name>
+    <em:description>Automatically plays the next video in the list without ever leaving fullscreen mode!</em:description>
+    <em:creator>Matthew de  Marillac</em:creator>
+    <em:homepageURL>https://github.com/mattd360/kissanime-userscript/tree/master/Firefox%20Extension</em:homepageURL>
+
+    <!-- Describe the Firefox versions we support -->
+
+    <em:targetApplication>
+      <Description>
+      	<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>1.5</em:minVersion>
+        <em:maxVersion>43.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+  </Description>
+
+</RDF>
