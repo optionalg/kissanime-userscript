@@ -1,7 +1,7 @@
 {
 	"name": "Kissanime Fullscreen - Auto-Play Next Video",
 	"manifest_version": 2,
-	"version": "1.1",
+	"version": "1.11",
 	"homepage_url": "https://github.com/mattd360/kissanime-userscript/tree/master/Firefox%20Extension",
 	"description": "Automatically plays the next video in the list without ever leaving fullscreen mode!",
 	"icons": {
