@@ -21,6 +21,5 @@
 		"matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
 		"js": ["jquery-1.7.1.min.js", "AutoPlay.js"]
 	}],
-	"background": {		"scripts": ["bootstrap.js"]
-	}
+	"web_accessible_resources":["icons/loading.gif"]
 }

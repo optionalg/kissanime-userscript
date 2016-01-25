@@ -12,7 +12,8 @@
       "48": "icons/48.png",
       "128": "icons/128.png"
    },
-  "permissions": ["activeTab"],
+  "permissions": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
+  "web_accessible_resources":["icons/loading.gif"],
   "page_action": {
     "default_title": "Kissanime Fullscreen - Auto-Play Next Video"
     },
@@ -21,12 +22,5 @@
       "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
       "js": ["jquery-1.7.1.min.js", "AutoPlay.js"]
     }
-  ],
-  "background": {
-  "matches": [
-        "*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"
-    ],
-    "scripts": ["bootstrap.js"],
-    "persistent": false
-  }
+  ]
 }
