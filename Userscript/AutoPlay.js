@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   http://matthewmarillac.com/api/meta.js
-// @version     1.1
+// @version     1.2
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
