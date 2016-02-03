@@ -22,7 +22,7 @@ var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element vi
 $(video).on('canplay', function (event) {       //when viddeo is ready to play add poster - prevents overlaping with default initial loading icon
 $(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
 });
-s
+
 $(video).on('ended',function()
 {     //once video ended
     console.log("Kiss Anime Auto Play");
