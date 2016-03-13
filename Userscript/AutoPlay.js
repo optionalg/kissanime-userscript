@@ -16,10 +16,24 @@
 //Copyright 2016 Matthew de Marillac
 //Kissanime AutoPlayer
 var Url; //global variables
+var skipFrom;
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
-      
-$(video).on('canplay', function (event) {       //when viddeo is ready to play add poster - prevents overlaping with default initial loading icon
+
+createButton();
+getStorage();
+
+$("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+setStorage();
+});
+
+$(video).on("play", function(){
+    if(video.currentTime == skipFrom && skipFrom !== "undefined" && skipFrom !== 0.00){
+        $(video).trigger("ended");
+    }
+});
+
+$(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
 $(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
 });
 
@@ -103,3 +117,23 @@ function getNextUrl(currentUrl)
          });
     }
 }
+
+//database
+function getStorage(){     
+if(typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+		skipFrom = localStorage.getItem("skipFrom");
+	}
+}
+
+function setStorage()
+{
+skipFrom = $("#skipFrom").val(); 
+localStorage.setItem("skipFrom", skipFrom);
+}
+
+function createButton()
+{
+$(".clsTempMSg").append("<div><hr/>Skip Credits From: <input id='skipFrom'/><button id='skipFromSubmit'>Submit</button><hr/></div>");
+}
+
