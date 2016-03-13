@@ -1,4 +1,4 @@
-    KissAnime Next Video Autoplayer
+##KissAnime Next Video Autoplayer
 User Script for Kissanime and packaged browser extensions.
 Plays the next video in the list automatically when the previous video is finished.
 
