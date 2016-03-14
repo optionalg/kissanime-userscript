@@ -161,27 +161,42 @@ function continueExecution()
 //->End loop
 
 //get the stored skip time from local storage if set
-function getStorage(){    
-    if(typeof(Storage) !== "undefined") {
-		skipFrom = localStorage.getItem(animeName+"_skipFrom");
-		$("#skipFrom").val(skipFrom);
+function getStorage(){  
+	try{  
+    	if(typeof(Storage) !== "undefined") {
+			skipFrom = localStorage.getItem(animeName+"_skipFrom");
+			$("#skipFrom").val(skipFrom);
+		}
+	}catch(e)
+	{
+		Console.log("Local storage not found");
 	}
 }
 
 //user has clicked on button save credit skip time in local storage
 function setStorage()
 {
-    if(typeof(Storage) !== "undefined") {
-    skipFrom = $("#skipFrom").val(); 
-    localStorage.setItem(animeName+"_skipFrom", skipFrom);
-    }
+	try{ 
+    	if(typeof(Storage) !== "undefined") {
+    	skipFrom = $("#skipFrom").val(); 
+    	localStorage.setItem(animeName+"_skipFrom", skipFrom);
+    	}
+    }catch(e)
+	{
+		Console.log(e);
+	}
 }
 
 function removeStorage()
 {
-localStorage.removeItem(animeName+"_skipFrom");
-skipFrom = null;
-getStorage();
+	try{ 
+		localStorage.removeItem(animeName+"_skipFrom");
+		skipFrom = null;
+		getStorage();
+	}catch(e)
+	{
+		Console.log("Local storage not found");
+	}
 }
 
 //create a form for user to submit skip time
