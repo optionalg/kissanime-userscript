@@ -2,7 +2,7 @@
 // @name        KissAnime Auto Play Next Episode
 // @description Automatically plays the next video in the list without ever leaving fullscreen mode! Works on Kissanime/kisscartoon/kissasian
 // @icon        https://github.com/mattd360/kissanime-userscript/blob/master/Chrome%20Extension/icons/128.png?raw=true
-// @locale      en 
+// @locale      en
 // @namespace   matthewmarillac.com
 // @author      Matthew James de Marillac
 // @include     *://kissanime.com/*
@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   http://matthewmarillac.com/api/meta.js
-// @version     1.2
+// @version     1.3
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
@@ -27,10 +27,8 @@ $("#skipFromSubmit").on('click', function (event) {       //when video is ready 
 setStorage();
 });
 
-$(video).on("play", function(){
-    if(video.currentTime == skipFrom && skipFrom !== "undefined" && skipFrom !== 0.00){
-        $(video).trigger("ended");
-    }
+$(video).on("playing", function(){
+    resume();
 });
 
 $(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
@@ -126,6 +124,20 @@ if(typeof(Storage) !== "undefined") {
 	}
 }
 
+function resume()
+{
+    if(getTime(video.currentTime) == skipFrom){
+        $(video).trigger("ended");
+        loop = false;
+    }
+    setTimeout(continueExecution, 1000);
+}
+
+function continueExecution()
+{
+resume();
+}
+
 function setStorage()
 {
 skipFrom = $("#skipFrom").val(); 
@@ -135,5 +147,13 @@ localStorage.setItem("skipFrom", skipFrom);
 function createButton()
 {
 $(".clsTempMSg").append("<div><hr/>Skip Credits From: <input id='skipFrom'/><button id='skipFromSubmit'>Submit</button><hr/></div>");
+}
+
+function getTime(totalSec)
+{
+var minutes = parseInt( totalSec / 60 ) % 60;
+var seconds = (totalSec % 60).toFixed(0);
+
+return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
 }
 
