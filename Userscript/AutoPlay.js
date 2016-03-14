@@ -98,6 +98,11 @@ function getNextUrl(currentUrl)
     if(currentUrl == "init")
     {//this is the first video in the que - get the next page from current page link
             var element = document.getElementById('btnNext').parentNode;    //get url of next video from button href
+            if(element==null)
+            {
+            console.log("No more videos in series");
+            return;
+            }
             console.log("Next Url: " + element.href);
             history.pushState({}, '', element.href);    //add page to history so users can keep track of what anime they have seen
             Url = element.href;     //asign video to current video global variable
