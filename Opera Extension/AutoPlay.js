@@ -1,31 +1,47 @@
 //Copyright 2016 Matthew de Marillac
 //Kissanime AutoPlayer
 var Url; //global variables
-try{
-    var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
-    var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
-        
-    $(video).on('canplay', function (event) {       //when viddeo is ready to play add poster - prevents overlaping with default initial loading icon
-    $(video).attr('poster', chrome.extension.getURL("/icons/loading.gif")); //add loading icon for pause between videos
-    });
+var skipFrom;
 
-    $(video).on('ended',function()
-    {     //once video ended
-        console.log("Kiss Anime Auto Play");
-        var element = document.getElementById('btnNext').parentNode;
-        if(Url == "" || Url == null)
-        {   //if this is the first url in que get the first video link and src
-            getNextUrl("init");
-        }
-        else
-        {   //otherwise we move foward with previous ajax requested page
-            getNextUrl(Url); 
-        }
+var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
+var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
+
+var params = window.location.pathname.split('/').slice(1);
+var animeName = params[1];
+
+createButton();
+getStorage();
+
+$("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+    setStorage();
 });
-}catch(err)
-{
-    console.log("No video found: " + err);    
-}
+
+$("#removeSkip").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+    removeStorage();
+});
+
+
+$(video).on("playing", function(){
+    resume();
+});
+
+$(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+    $(video).attr('poster', chrome.extension.getURL("/icons/loading.gif"));  //add loading icon for pause between videos
+});
+
+$(video).on('ended',function()
+{     //once video ended
+    console.log("Kiss Anime Auto Play");
+    var element = document.getElementById('btnNext').parentNode;
+    if(Url == "" || Url == null)
+    {   //if this is the first url in que get the first video link and src
+        getNextUrl("init");
+    }
+    else
+    {   //otherwise we move foward with previous ajax requested page
+        getNextUrl(Url); 
+    }
+});
 
 $("body").keydown(function(event) {     //when user clicks left or right key navigate back and foward
   var element;
@@ -65,6 +81,11 @@ function getNextUrl(currentUrl)
     if(currentUrl == "init")
     {//this is the first video in the que - get the next page from current page link
             var element = document.getElementById('btnNext').parentNode;    //get url of next video from button href
+            if(element==null)
+            {
+            console.log("No more videos in series");
+            return;
+            }
             console.log("Next Url: " + element.href);
             history.pushState({}, '', element.href);    //add page to history so users can keep track of what anime they have seen
             Url = element.href;     //asign video to current video global variable
@@ -93,3 +114,93 @@ function getNextUrl(currentUrl)
          });
     }
 }
+
+//->Recursive loop
+function resume()
+{
+	//if skipping hasn't been set exit this function
+    if(skipFrom == "undefined" || skipFrom == "" || skipFrom == null)
+    {
+    return;
+    }
+    //if current video time matches stored skipping time trigger video ended event handler
+    if(getTime(video.currentTime) == skipFrom){
+        $(video).trigger("ended");
+        return;
+    }
+    //kill recursive loop
+    $(video).on("pause", function(){
+    return;
+	});
+    //recurse loop every second video playes
+    setTimeout(continueExecution, 1000);
+}
+
+function continueExecution()
+{
+    //reiterate loop
+    resume();
+}
+//->End loop
+
+//->DB
+
+//get the stored skip time from local storage if set
+function getStorage(){  
+	try{  
+    	if(typeof(Storage) !== "undefined") {
+			skipFrom = localStorage.getItem(animeName+"_skipFrom");
+			$("#skipFrom").val(skipFrom);
+		}
+	}catch(e)
+	{
+		Console.log("Local storage not found");
+	}
+}
+
+//user has clicked on button save credit skip time in local storage
+function setStorage()
+{
+	try{ 
+    	if(typeof(Storage) !== "undefined") {
+    	skipFrom = $("#skipFrom").val(); 
+    	localStorage.setItem(animeName+"_skipFrom", skipFrom);
+    	}
+    }catch(e)
+	{
+		Console.log(e);
+	}
+}
+
+function removeStorage()
+{
+	try{ 
+		localStorage.removeItem(animeName+"_skipFrom");
+		skipFrom = null;
+		getStorage();
+	}catch(e)
+	{
+		Console.log("Local storage not found");
+	}
+}
+
+//->END DB
+
+//create a form for user to submit skip time
+function createButton()
+{
+    if(typeof(Storage) !== "undefined") {
+        $(".clsTempMSg").append("<div><hr/>Skip Credits From: <input id='skipFrom' placeholder='30:20'/>" +
+                        "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button><hr/></div>");
+    }
+}
+
+//convert video play time(float) to timestamp
+function getTime(totalSec)
+{
+    var minutes = parseInt( totalSec / 60 ) % 60;
+    var seconds = (totalSec % 60).toFixed(0);
+    return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
+}
+
+
