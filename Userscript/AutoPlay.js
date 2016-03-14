@@ -9,7 +9,7 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
-// @updateURL   http://matthewmarillac.com/api/meta.js
+// @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
 // @version     1.3
 // @grant       none
 // ==/UserScript==
@@ -17,22 +17,33 @@
 //Kissanime AutoPlayer
 var Url; //global variables
 var skipFrom;
+
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
 
-createButton();
-getStorage();
+var params = window.location.pathname.split('/').slice(1);
+var animeName = params[1];
+
+$(document).ready(function(){
+    createButton();
+    getStorage();
+});
 
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
-setStorage();
+    setStorage();
 });
+
+$("#removeSkip").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+    removeStorage();
+});
+
 
 $(video).on("playing", function(){
     resume();
 });
 
 $(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
-$(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
+    $(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
 });
 
 $(video).on('ended',function()
@@ -116,44 +127,71 @@ function getNextUrl(currentUrl)
     }
 }
 
-//database
-function getStorage(){     
-if(typeof(Storage) !== "undefined") {
-    // Code for localStorage/sessionStorage.
-		skipFrom = localStorage.getItem("skipFrom");
-	}
-}
-
+//->Recursive loop
 function resume()
 {
+	//if skipping hasn't been set exit this function
+    if(skipFrom == "undefined" || skipFrom == "" || skipfrom == null)
+    {
+    return;
+    }
+    //if current video time matches stored skipping time trigger video ended event handler
     if(getTime(video.currentTime) == skipFrom){
         $(video).trigger("ended");
-        loop = false;
+        return;
     }
+    //kill recursive loop
+    $(video).on("pause", function(){
+    return;
+	});
+    //recurse loop every second video playes
     setTimeout(continueExecution, 1000);
 }
 
 function continueExecution()
 {
-resume();
+    //reiterate loop
+    resume();
+}
+//->End loop
+
+//get the stored skip time from local storage if set
+function getStorage(){    
+    if(typeof(Storage) !== "undefined") {
+		skipFrom = localStorage.getItem(animeName+"_skipFrom");
+		$("#skipFrom").val(skipFrom);
+	}
 }
 
+//user has clicked on button save credit skip time in local storage
 function setStorage()
 {
-skipFrom = $("#skipFrom").val(); 
-localStorage.setItem("skipFrom", skipFrom);
+    skipFrom = $("#skipFrom").val(); 
+    localStorage.setItem(animeName+"_skipFrom", skipFrom);
 }
 
+function removeStorage()
+{
+localStorage.removeItem(animeName+"_skipFrom");
+skipFrom = null;
+getStorage();
+}
+
+//create a form for user to submit skip time
 function createButton()
 {
-$(".clsTempMSg").append("<div><hr/>Skip Credits From: <input id='skipFrom'/><button id='skipFromSubmit'>Submit</button><hr/></div>");
+    if(typeof(Storage) !== "undefined") {
+        $(".clsTempMSg").append("<div><hr/>Skip Credits From: <input id='skipFrom' placeholder='30:20'/>" +
+                        "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button><hr/></div>");
+    }
 }
 
+//convert video play time(float) to timestamp
 function getTime(totalSec)
 {
-var minutes = parseInt( totalSec / 60 ) % 60;
-var seconds = (totalSec % 60).toFixed(0);
-
-return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
+    var minutes = parseInt( totalSec / 60 ) % 60;
+    var seconds = (totalSec % 60).toFixed(0);
+    return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
 }
+
 

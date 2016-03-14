@@ -7,7 +7,7 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
-// @downloadURL   http://matthewmarillac.com/api/AutoPlay.js
+// @downloadURL https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/AutoPlay.js
 // @version     1.3
 // @grant       none
 // ==/UserScript==
