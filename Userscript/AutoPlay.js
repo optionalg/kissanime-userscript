@@ -136,7 +136,7 @@ function getNextUrl(currentUrl)
 function resume()
 {
 	//if skipping hasn't been set exit this function
-    if(skipFrom == "undefined" || skipFrom == "" || skipfrom == null)
+    if(skipFrom == "undefined" || skipFrom == "" || skipFrom == null)
     {
     return;
     }
