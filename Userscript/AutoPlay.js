@@ -43,7 +43,7 @@ $(video).on("playing", function(){
 });
 
 $(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
-    $(video).attr('poster', 'http://www.matthewmarillac.com/api/loading.gif'); //add loading icon for pause between videos
+    $(video).attr('poster', 'https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/loading.gif'); //add loading icon for pause between videos
 });
 
 $(video).on('ended',function()
@@ -171,8 +171,10 @@ function getStorage(){
 //user has clicked on button save credit skip time in local storage
 function setStorage()
 {
+    if(typeof(Storage) !== "undefined") {
     skipFrom = $("#skipFrom").val(); 
     localStorage.setItem(animeName+"_skipFrom", skipFrom);
+    }
 }
 
 function removeStorage()
