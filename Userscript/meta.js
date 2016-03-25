@@ -8,6 +8,6 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @downloadURL https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/AutoPlay.js
-// @version     1.3
+// @version     1.4
 // @grant       none
 // ==/UserScript==

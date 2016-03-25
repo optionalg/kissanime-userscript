@@ -214,7 +214,7 @@ function createOverlay()
 createButton();
 $(videoPlaceholder).append("<div id='overlay'></div>");
  
-  $("body").append("<style>#overlay {position: absolute; right:0; bottom: 50px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(12, 12, 12, 0.75); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+  $("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
   editMessage("<div><p>Thanks for using Kissanime Autoplayer. Be sure to leave a rating if you enjoy using it!</p>"+
   "<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
                         "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button></div>");
