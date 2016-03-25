@@ -1,4 +1,3 @@
-https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/loading.gif
 // ==UserScript==
 // @name        KissAnime Auto Play Next Episode
 // @description Automatically plays the next video in the list without ever leaving fullscreen mode! Works on Kissanime/kisscartoon/kissasian
