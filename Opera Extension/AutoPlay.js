@@ -9,8 +9,7 @@ var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element vi
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
 
-createButton();
-getStorage();
+createOverlay();	//create interface
 
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     setStorage();
@@ -20,6 +19,14 @@ $("#removeSkip").on('click', function (event) {       //when video is ready to p
     removeStorage();
 });
 
+$("#skip-ol").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+    var overlay= document.getElementById('overlay');
+    overlay.style.visibility= 'visible';
+});
+
+$(video).on('click', function(){
+hideMessage();
+});
 
 $(video).on("playing", function(){
     resume();
@@ -141,6 +148,7 @@ function continueExecution()
     //reiterate loop
     resume();
 }
+
 //->End loop
 
 //->DB
@@ -189,10 +197,8 @@ function removeStorage()
 //create a form for user to submit skip time
 function createButton()
 {
-    if(typeof(Storage) !== "undefined") {
-        $(".clsTempMSg").append("<div><hr/>Skip Credits From: <input id='skipFrom' placeholder='30:20'/>" +
-                        "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button><hr/></div>");
-    }
+   $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='"+chrome.extension.getURL("/icons/48.png")+"'/></div>");
+   
 }
 
 //convert video play time(float) to timestamp
@@ -203,4 +209,29 @@ function getTime(totalSec)
     return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
 }
 
+function createOverlay()
+{
+createButton();
+$(videoPlaceholder).append("<div id='overlay'></div>");
+ 
+  $("body").append("<style>#overlay {position: absolute; right:0; bottom: 50px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(12, 12, 12, 0.75); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+  editMessage("<div><p>Thanks for using Kissanime Autoplayer. Be sure to leave a rating if you enjoy using it!</p>"+
+  "<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
+                        "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button></div>");
+  hideMessage();
+  getStorage();
+}
 
+function editMessage(message)
+{
+
+ var overlay= document.getElementById('overlay');
+ overlay.style.visibility= 'visible';
+ overlay.innerHTML = message;
+}
+
+function hideMessage()
+{
+ var overlay= document.getElementById('overlay');
+ overlay.style.visibility='hidden';
+}
