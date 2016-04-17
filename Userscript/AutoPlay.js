@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.4.1
+// @version     1.4
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
@@ -227,7 +227,7 @@ function getTime(totalSec)
 function createOverlay()
 {
 createButton();
-$(".video-js").prepend("<div id='overlay'></div>");
+$(".video-js").append("<div id='overlay'></div>");
  
   $("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
   editMessage("<div><p>Thanks for using Kissanime Autoplayer. Be sure to leave a rating if you enjoy using it!</p>"+
