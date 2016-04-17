@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.4
+// @version     1.4.1
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
