@@ -17,6 +17,7 @@
 //Kissanime AutoPlayer
 var Url; //global variables
 var skipFrom;
+var itr = false;
 
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
@@ -41,14 +42,12 @@ $("#skip-ol").on('click', function (event) {       //when video is ready to play
 });
 
 $('html').on('click', function(event){
-    //alert(event.target.parentElement.id);
-    if(event.target.id == "overlay"||
-       event.target.parentElement.id == "overlay"||
-       event.target.id == "skip-ol"  
-      ){
-    // do nothing
-    }
-    else{hideMessage();}
+    if(event.target.id === "overlay"||
+       event.target.parentElement.id === "overlay"||
+       event.target.id === "skip-ol"){}else
+       {
+           hideMessage();
+       }		
 });
 
 $(video).on("playing", function(){
@@ -62,8 +61,16 @@ $(video).on('canplay', function (event) {       //when video is ready to play ad
 $(video).on('ended',function()
 {     //once video ended
     console.log("Kiss Anime Auto Play");
+    if(itr === false){
+    getNextInQue();
+    }else{
+        itr = false;
+    }
+});
+
+function getNextInQue(){
     var element = document.getElementById('btnNext').parentNode;
-    if(Url == "" || Url == null)
+    if(Url === "" || Url === null)
     {   //if this is the first url in que get the first video link and src
         getNextUrl("init");
     }
@@ -71,7 +78,8 @@ $(video).on('ended',function()
     {   //otherwise we move foward with previous ajax requested page
         getNextUrl(Url); 
     }
-});
+    
+}
 
 $("body").keydown(function(event) {     //when user clicks left or right key navigate back and foward
   var element;
@@ -111,7 +119,7 @@ function getNextUrl(currentUrl)
     if(currentUrl == "init")
     {//this is the first video in the que - get the next page from current page link
             var element = document.getElementById('btnNext').parentNode;    //get url of next video from button href
-            if(element==null)
+            if(element===null)
             {
             console.log("No more videos in series");
             return;
@@ -149,27 +157,18 @@ function getNextUrl(currentUrl)
 function resume()
 {
 	//if skipping hasn't been set exit this function
-    if(skipFrom == "undefined" || skipFrom == "" || skipFrom == null)
+    if(skipFrom === "undefined" || skipFrom === "" || skipFrom === null)
     {
     return;
     }
     //if current video time matches stored skipping time trigger video ended event handler
-    if(getTime(video.currentTime) == skipFrom){
-        $(video).trigger("ended");
-        return;
-    }
-    //kill recursive loop
-    $(video).on("pause", function(){
-    return;
-	});
+    if(getTime(video.currentTime) === skipFrom){
+        itr = true;
+        getNextInQue();
+    }else{
     //recurse loop every second video playes
-    setTimeout(continueExecution, 1000);
-}
-
-function continueExecution()
-{
-    //reiterate loop
-    resume();
+    setTimeout(resume, 1000);
+    }
 }
 
 //->End loop
