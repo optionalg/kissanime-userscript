@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.4
+// @version     1.4.2
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
@@ -37,10 +37,18 @@ $("#removeSkip").on('click', function (event) {       //when video is ready to p
 $("#skip-ol").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     var overlay= document.getElementById('overlay');
     overlay.style.visibility= 'visible';
+    event.stopPropagation();
 });
 
-$(video).on('click', function(){
-hideMessage();
+$('html').on('click', function(event){
+    //alert(event.target.parentElement.id);
+    if(event.target.id == "overlay"||
+       event.target.parentElement.id == "overlay"||
+       event.target.id == "skip-ol"  
+      ){
+    // do nothing
+    }
+    else{hideMessage();}
 });
 
 $(video).on("playing", function(){
@@ -227,12 +235,12 @@ function getTime(totalSec)
 function createOverlay()
 {
 createButton();
-$(".video-js").append("<div id='overlay'></div>");
+$(videoPlaceholder).prepend("<div id='overlay'></div>");
  
   $("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
-  editMessage("<div><p>Thanks for using Kissanime Autoplayer. Be sure to leave a rating if you enjoy using it!</p>"+
+  editMessage("<p>Thanks for using <a href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
   "<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
-                        "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button></div>");
+                        "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button>");
   hideMessage();
   getStorage();
 }
