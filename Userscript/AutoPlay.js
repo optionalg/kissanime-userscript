@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.4.2
+// @version     1.5.1
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
@@ -51,6 +51,7 @@ $('html').on('click', function(event){
 });
 
 $(video).on("playing", function(){
+    itr = false;
     resume();
 });
 
@@ -156,19 +157,26 @@ function getNextUrl(currentUrl)
 //->Recursive loop
 function resume()
 {
+    $(video).on('ended', function (event) {
+        return;
+    }); 
+    $(video).on('paused', function (event) {
+        return
+    }); 
 	//if skipping hasn't been set exit this function
     if(skipFrom === "undefined" || skipFrom === "" || skipFrom === null)
     {
     return;
     }
     //if current video time matches stored skipping time trigger video ended event handler
-    if(getTime(video.currentTime) === skipFrom){
+    if(getTime(video.currentTime) === skipFrom && itr === false){
         itr = true;
         getNextInQue();
     }else{
     //recurse loop every second video playes
     setTimeout(resume, 1000);
     }
+   
 }
 
 //->End loop
