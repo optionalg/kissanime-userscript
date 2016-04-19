@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.5.1
+// @version     1.5.2
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
@@ -26,7 +26,7 @@ var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
 
 createOverlay();	//create interface
-
+createOverlay2();
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     setStorage();
 });
@@ -97,6 +97,7 @@ $("body").keydown(function(event) {     //when user clicks left or right key nav
 function nextVideo(url){
     // request video URL
     console.log("Searching for video at: " + url);
+    $.when(endMessageCountdown()).done(function(){
     $.ajax({
         type: "GET",
         url: url,
@@ -112,6 +113,7 @@ function nextVideo(url){
             // error in ajax
             console.log(error);
         }
+        });
 }); // ready
 }
 
@@ -125,6 +127,7 @@ function getNextUrl(currentUrl)
             console.log("No more videos in series");
             return;
             }
+           
             console.log("Next Url: " + element.href);
             history.pushState({}, '', element.href);    //add page to history so users can keep track of what anime they have seen
             Url = element.href;     //asign video to current video global variable
@@ -161,7 +164,7 @@ function resume()
         return;
     }); 
     $(video).on('paused', function (event) {
-        return
+        return;
     }); 
 	//if skipping hasn't been set exit this function
     if(skipFrom === "undefined" || skipFrom === "" || skipFrom === null)
@@ -252,6 +255,16 @@ $(videoPlaceholder).prepend("<div id='overlay'></div>");
   getStorage();
 }
 
+function createOverlay2()
+{
+$(videoPlaceholder).prepend("<div id='overlay2'>Next Video Playing in...</div>");
+ 
+  $("body").append("<style>#overlay2 {position: absolute; left:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 200px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+  
+  hideMessage2();
+  getStorage();
+}
+
 function editMessage(message)
 {
 
@@ -264,4 +277,31 @@ function hideMessage()
 {
  var overlay= document.getElementById('overlay');
  overlay.style.visibility='hidden';
+}
+
+function hideMessage2()
+{
+ var overlay= document.getElementById('overlay2');
+ overlay.style.visibility='hidden';
+}
+
+function endMessageCountdown()
+{
+return $.Deferred(function() {
+    var self = this;
+	var overlay= document.getElementById('overlay2');
+    overlay.style.visibility= 'visible';
+	var counter = 10;
+
+	var interval = setInterval(function() {
+    counter--;
+    jQuery("#overlay2").html("Next Video Playing in "+counter+"...");
+    if (counter === 0) {    
+        // Stop the counter
+        clearInterval(interval);
+        hideMessage2();
+        self.resolve();
+    }
+	}, 1000);
+    });
 }
