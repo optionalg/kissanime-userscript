@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        KissAnime Auto Play Next Episode
 // @description Automatically plays the next video in the list without ever leaving fullscreen mode! Works on Kissanime/kisscartoon/kissasian
-// @icon        https://github.com/mattmarillac/kissanime-userscript/blob/master/Chrome%20Extension/icons/128.png?raw=true
+// @icon        https://github.com/mattmarillac/kissanime-userscript/blob/master/Chrome%20Extension/128.png?raw=true
 // @locale      en
 // @namespace   matthewmarillac.com
 // @author      Matthew James de Marillac
@@ -234,7 +234,7 @@ function removeStorage()
 //create a form for user to submit skip time
 function createButton()
 {
-   $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/icons/48.png'/></div>");
+   $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
    
 }
 
