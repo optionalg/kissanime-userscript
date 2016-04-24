@@ -204,8 +204,12 @@ function setStorage()
 {
 	try{ 
     	if(typeof(Storage) !== "undefined") {
-    	skipFrom = $("#skipFrom").val(); 
-    	localStorage.setItem(animeName+"_skipFrom", skipFrom);
+    		skipFrom = $("#skipFrom").val();
+    		//check for valid input
+    		if(skipFrom.match('^[0-5][0-9]:[0-5][0-9]$')){
+    		//store entered time in local storage
+    		localStorage.setItem(animeName+"_skipFrom", skipFrom);
+    		}
     	}
     }catch(e)
 	{
