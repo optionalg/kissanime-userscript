@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.5.3
+// @version     1.5.4
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
@@ -206,7 +206,7 @@ function setStorage()
     	if(typeof(Storage) !== "undefined") {
     		skipFrom = $("#skipFrom").val();
     		//check for valid input
-    		if(skipFrom.match('^[0-5][0-9]:[0-5][0-9]$')){
+    		if(skipFrom.match('^[0-5][0-9]:[0-5][0-9]$') || skipFrom.match('^[0-9]:[0-5][0-9]:[0-5][0-9]$')){
     		//store entered time in local storage
     		localStorage.setItem(animeName+"_skipFrom", skipFrom);
     		}
