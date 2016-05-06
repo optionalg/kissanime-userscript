@@ -349,7 +349,7 @@ return $.Deferred(function() {
     var self = this;
 	var overlay= document.getElementById('overlay2');
     overlay.style.visibility= 'visible';
-	var counter = 10;
+	var counter = 5;
 
 	var interval = setInterval(function() {
     counter--;
