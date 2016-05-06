@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.5.4
+// @version     1.5.5
 // @grant       none
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
@@ -63,7 +63,7 @@ $(video).on('ended',function()
 {     //once video ended
     console.log("Kiss Anime Auto Play");
     if(itr === false){
-    getNextInQue();
+    	getNextInQue();
     }else{
         itr = false;
     }
@@ -85,7 +85,7 @@ function getNextInQue(){
 //When the user clicks on the next button, goes to the next video from the current selected index
 $(document.getElementById('btnNext').parentNode).on('click', function(event) {
 	event.preventDefault();
-    	PrevOrNext("next");
+    PrevOrNext("next");
 });
 
 //When the user clicks on the previous button, goes to the previous video from the current selected index
@@ -175,19 +175,19 @@ function getNextUrl(currentUrl)
     }
 }
 
-//check if on kisscarton
+
 function OnKissCartoon()
-{
+{	//check if on kisscarton
 	if(window.location.href.indexOf("kisscartoon") > -1) {
-       return true;
+    	return true;
     }else{
 		return false;
 	}
 }
 
-//Goes to the next or previous page based off the currently selected episode
+
 function PrevOrNext(pon)
-{
+{ 	//Goes to the next or previous page based off the currently selected episode
 	var url;
 	var element;
 	var to;
@@ -240,14 +240,11 @@ function resume()
     }
    
 }
-
 //->End loop
 
 //->DB
-
-//get the stored skip time from local storage if set
 function getStorage(){  
-	try{  
+	try{	//get the stored skip time from local storage if set  
     	if(typeof(Storage) !== "undefined") {
 			skipFrom = localStorage.getItem(animeName+"_skipFrom");
 			$("#skipFrom").val(skipFrom);
@@ -258,9 +255,9 @@ function getStorage(){
 	}
 }
 
-//user has clicked on button save credit skip time in local storage
+
 function setStorage()
-{
+{	//user has clicked on button save credit skip time in local storage
 	try{ 
     	if(typeof(Storage) !== "undefined") {
     		skipFrom = $("#skipFrom").val();
@@ -287,19 +284,18 @@ function removeStorage()
 		Console.log("Local storage not found");
 	}
 }
-
 //->END DB
 
-//create a form for user to submit skip time
+
 function createButton()
-{
+{	//create a form for user to submit skip time
    $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
    
 }
 
-//convert video play time(float) to timestamp
+
 function getTime(totalSec)
-{
+{	//convert video play time(float) to timestamp
     var minutes = parseInt( totalSec / 60 ) % 60;
     var seconds = (totalSec % 60).toFixed(0);
     return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
@@ -307,45 +303,44 @@ function getTime(totalSec)
 
 function createOverlay()
 {
-createButton();
-$(videoPlaceholder).prepend("<div id='overlay'></div>");
+	createButton();
+	$(videoPlaceholder).prepend("<div id='overlay'></div>");
  
-  $("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
-  editMessage("<p>Thanks for using <a href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
-  "<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
+	$("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+	editMessage("<p>Thanks for using <a href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
+	"<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
                         "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button>");
-  hideMessage();
-  getStorage();
+	hideMessage();
+	getStorage();
 }
 
 function createOverlay2()
 {
-$(videoPlaceholder).prepend("<div id='overlay2'>Next Video Playing in...</div>");
+	$(videoPlaceholder).prepend("<div id='overlay2'>Next Video Playing in...</div>");
  
-  $("body").append("<style>#overlay2 {position: absolute; left:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 200px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+	$("body").append("<style>#overlay2 {position: absolute; left:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 200px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
   
-  hideMessage2();
-  getStorage();
+	hideMessage2();
+	getStorage();
 }
 
 function editMessage(message)
 {
-
- var overlay= document.getElementById('overlay');
- overlay.style.visibility= 'visible';
- overlay.innerHTML = message;
+	var overlay= document.getElementById('overlay');
+	overlay.style.visibility= 'visible';
+	overlay.innerHTML = message;
 }
 
 function hideMessage()
 {
- var overlay= document.getElementById('overlay');
- overlay.style.visibility='hidden';
+	var overlay= document.getElementById('overlay');
+	overlay.style.visibility='hidden';
 }
 
 function hideMessage2()
 {
- var overlay= document.getElementById('overlay2');
- overlay.style.visibility='hidden';
+	var overlay= document.getElementById('overlay2');
+	overlay.style.visibility='hidden';
 }
 
 function endMessageCountdown()
