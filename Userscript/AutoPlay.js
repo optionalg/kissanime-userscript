@@ -82,6 +82,18 @@ function getNextInQue(){
     
 }
 
+//When the user clicks on the next button, goes to the next video from the current selected index
+$(document.getElementById('btnNext').parentNode).on('click', function(event) {
+	event.preventDefault();
+    	PrevOrNext("next");
+});
+
+//When the user clicks on the previous button, goes to the previous video from the current selected index
+$(document.getElementById('btnPrevious').parentNode).on('click', function(event) {
+	event.preventDefault();
+	PrevOrNext("prev");
+});
+
 $("body").keydown(function(event) {     //when user clicks left or right key navigate back and foward
   var element;
   if (event.which == 39) {      //user presses right arrow button
@@ -105,9 +117,15 @@ function nextVideo(url){
         success: function (response) 
         {
             var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
-            console.log("Next Video Src: " + window.atob($(select).val()));
-            video.src = window.atob($(select).val());       //base 64 decode extracted url and play src
-            document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
+		if (OnKissCartoon()) {
+			console.log("Next Video Src: " + $kissenc.decrypt($(select).val()));
+			video.src = $kissenc.decrypt($(select).val());     //decodes using kisscartoon's decoder
+		}else{
+			console.log("Next Video Src: " + window.atob($(select).val()));
+			video.src = window.atob($(select).val());       //base 64 decode extracted url and play src
+		}
+	video.play();
+        document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
         },
         error: function (xhr, status, error) {
             // error in ajax
@@ -155,6 +173,47 @@ function getNextUrl(currentUrl)
             }
          });
     }
+}
+
+//check if on kisscarton
+function OnKissCartoon()
+{
+	if(window.location.href.indexOf("kisscartoon") > -1) {
+       return true;
+    }else{
+		return false;
+	}
+}
+
+//Goes to the next or previous page based off the currently selected episode
+function PrevOrNext(pon)
+{
+	var url;
+	var element;
+	var to;
+	if (pon === "next"){
+		url = window.location.href;
+		element = document.getElementById("selectEpisode");
+		element.selectedIndex++;
+		to = url.lastIndexOf('/');
+		to = to == -1 ? url.length : to + 1;
+		Url = url.substring(0, to)  + element.options[element.selectedIndex].value;
+		console.log("url : " + Url);
+		window.location.href = Url;
+	}
+	if (pon === "prev") {
+		url = window.location.href;
+		element = document.getElementById("selectEpisode");
+		element.selectedIndex--;
+		to = url.lastIndexOf('/');
+		to = to == -1 ? url.length : to + 1;
+		Url = url.substring(0, to)  + element.options[element.selectedIndex].value;
+		console.log("url : " + Url);
+		window.location.href = Url;
+	}
+	if (pon != "prev" && pon != "next") {
+        console.log("Varible taken in PrevOrNext is invalid");
+	}
 }
 
 //->Recursive loop
