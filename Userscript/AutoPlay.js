@@ -9,9 +9,12 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
+// @include     http://matthewmarillac.com/api/*
+// @resource    materialize http://matthewmarillac.com/api/mt.css
+// @grant       GM_addStyle
+// @grant       GM_getResourceText
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.5.5
-// @grant       none
+// @version     1.5.6
 // ==/UserScript==
 //Copyright 2016 Matthew de Marillac
 //Kissanime AutoPlayer
@@ -24,6 +27,9 @@ var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element vi
 
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
+
+var newCSS = GM_getResourceText ("materialize");
+GM_addStyle (newCSS);
 
 createOverlay();	//create interface
 createOverlay2();
@@ -43,11 +49,11 @@ $("#skip-ol").on('click', function (event) {       //when video is ready to play
 
 $('html').on('click', function(event){
     if(event.target.id === "overlay"||
-       event.target.parentElement.id === "overlay"||
+       event.target.parentElement.id === "overlay"|| $(event.target).is(':input') ||
        event.target.id === "skip-ol"){}else
        {
            hideMessage();
-       }		
+       }
 });
 
 $(video).on("playing", function(){
@@ -77,9 +83,9 @@ function getNextInQue(){
     }
     else
     {   //otherwise we move foward with previous ajax requested page
-        getNextUrl(Url); 
+        getNextUrl(Url);
     }
-    
+
 }
 
 //When the user clicks on the next button, goes to the next video from the current selected index
@@ -101,7 +107,7 @@ $("body").keydown(function(event) {     //when user clicks left or right key nav
       window.location = element;        //reload page to next page
   }
   if (event.which == 37) {  //user presses left arrow button
-      element = document.getElementById('btnPrevious').parentNode; 
+      element = document.getElementById('btnPrevious').parentNode;
       window.location = element;    //reload page to previous page
   }
 });
@@ -114,7 +120,7 @@ function nextVideo(url){
         type: "GET",
         url: url,
         cache: false,
-        success: function (response) 
+        success: function (response)
         {
             var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
 		if (OnKissCartoon()) {
@@ -145,7 +151,7 @@ function getNextUrl(currentUrl)
             console.log("No more videos in series");
             return;
             }
-           
+
             console.log("Next Url: " + element.href);
             history.pushState({}, '', element.href);    //add page to history so users can keep track of what anime they have seen
             Url = element.href;     //asign video to current video global variable
@@ -221,10 +227,10 @@ function resume()
 {
     $(video).on('ended', function (event) {
         return;
-    }); 
+    });
     $(video).on('paused', function (event) {
         return;
-    }); 
+    });
 	//if skipping hasn't been set exit this function
     if(skipFrom === "undefined" || skipFrom === "" || skipFrom === null)
     {
@@ -238,13 +244,13 @@ function resume()
     //recurse loop every second video playes
     setTimeout(resume, 1000);
     }
-   
+
 }
 //->End loop
 
 //->DB
-function getStorage(){  
-	try{	//get the stored skip time from local storage if set  
+function getStorage(){
+	try{	//get the stored skip time from local storage if set
     	if(typeof(Storage) !== "undefined") {
 			skipFrom = localStorage.getItem(animeName+"_skipFrom");
 			$("#skipFrom").val(skipFrom);
@@ -258,7 +264,7 @@ function getStorage(){
 
 function setStorage()
 {	//user has clicked on button save credit skip time in local storage
-	try{ 
+	try{
     	if(typeof(Storage) !== "undefined") {
     		skipFrom = $("#skipFrom").val();
     		//check for valid input
@@ -275,7 +281,7 @@ function setStorage()
 
 function removeStorage()
 {
-	try{ 
+	try{
 		localStorage.removeItem(animeName+"_skipFrom");
 		skipFrom = null;
 		getStorage();
@@ -290,7 +296,7 @@ function removeStorage()
 function createButton()
 {	//create a form for user to submit skip time
    $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
-   
+
 }
 
 
@@ -304,12 +310,12 @@ function getTime(totalSec)
 function createOverlay()
 {
 	createButton();
-	$(videoPlaceholder).prepend("<div id='overlay'></div>");
- 
+	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
+
 	$("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
-	editMessage("<p>Thanks for using <a href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
-	"<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
-                        "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button>");
+	editMessage("<div class='card-content white-text'><p>Thanks for using <a class='teal-text' href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
+	"<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
+                        "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
 	hideMessage();
 	getStorage();
 }
@@ -317,9 +323,9 @@ function createOverlay()
 function createOverlay2()
 {
 	$(videoPlaceholder).prepend("<div id='overlay2'>Next Video Playing in...</div>");
- 
+
 	$("body").append("<style>#overlay2 {position: absolute; left:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 200px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
-  
+
 	hideMessage2();
 	getStorage();
 }
@@ -354,7 +360,7 @@ return $.Deferred(function() {
 	var interval = setInterval(function() {
     counter--;
     jQuery("#overlay2").html("Next Video Playing in "+counter+"...");
-    if (counter === 0) {    
+    if (counter === 0) {
         // Stop the counter
         clearInterval(interval);
         hideMessage2();
@@ -363,3 +369,4 @@ return $.Deferred(function() {
 	}, 1000);
     });
 }
+

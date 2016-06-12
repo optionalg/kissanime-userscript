@@ -21,9 +21,28 @@ module.exports = function(grunt) {
       },
 
       // when this task is run, lint the Gruntfile and all js files in src
-      build: ['Gruntfile.js', 'userscript/**/*.js']
-    }
-
+      build: ['Gruntfile.js', 'Userscript/AutoPlay.js']
+    },
+	compass: {
+	   dist: {
+        options: {
+            sassDir: 'Userscript/materialize-src/sass',
+            cssDir: 'Userscript',
+            environment: 'production',
+            outputStyle: 'compressed'
+      			  }
+   			 }
+		},
+	copy: {
+  		main: {
+   		 files: [
+     	 // includes files within path
+     	 {expand: true, src: ['bower_components/jquery/dist/jquery.min.js'], dest: 'Chrome Extension/', filter: 'isFile'},
+		// includes files within path
+     	 {expand: true, src: ['bower_components/jquery/dist/jquery.min.js'], dest: 'Opera Extension/', filter: 'isFile'},
+    	],
+ 	},
+	},
   });
 
   // ===========================================================================
@@ -32,4 +51,8 @@ module.exports = function(grunt) {
   // we can only load these if they are in our package.json
   // make sure you have run npm install so our app can find these
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.registerTask('default', ['compass', 'copy', 'jshint']);
+  grunt.registerTask('build', ['compass']);
 };

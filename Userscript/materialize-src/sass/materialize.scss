@@ -1,0 +1,17 @@
+@charset "UTF-8";
+#overlay, #overlay2{
+// Mixins
+// @import "components/prefixer";
+@import "components/mixins";
+@import "components/color";
+
+// Variables;
+@import "components/variables";
+
+// components
+@import "components/global";
+@import "components/typography";
+@import "components/buttons";
+@import "components/waves";
+@import "components/forms/forms";
+}

@@ -1,4 +1,3 @@
-//Copyright 2016 Matthew de Marillac
 //Kissanime AutoPlayer
 var Url; //global variables
 var skipFrom;
@@ -41,14 +40,14 @@ $(video).on("playing", function(){
 });
 
 $(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
-     $(video).attr('poster', chrome.extension.getURL("/icons/loading.gif"));   //add loading icon for pause between videos
+    $(video).attr('poster', chrome.extension.getURL("/icons/loading.gif"));  //add loading icon for pause between videos
 });
 
 $(video).on('ended',function()
 {     //once video ended
     console.log("Kiss Anime Auto Play");
     if(itr === false){
-    getNextInQue();
+    	getNextInQue();
     }else{
         itr = false;
     }
@@ -66,6 +65,18 @@ function getNextInQue(){
     }
     
 }
+
+//When the user clicks on the next button, goes to the next video from the current selected index
+$(document.getElementById('btnNext').parentNode).on('click', function(event) {
+	event.preventDefault();
+    PrevOrNext("next");
+});
+
+//When the user clicks on the previous button, goes to the previous video from the current selected index
+$(document.getElementById('btnPrevious').parentNode).on('click', function(event) {
+	event.preventDefault();
+	PrevOrNext("prev");
+});
 
 $("body").keydown(function(event) {     //when user clicks left or right key navigate back and foward
   var element;
@@ -89,10 +100,16 @@ function nextVideo(url){
         cache: false,
         success: function (response) 
         {
-            var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
-            console.log("Next Video Src: " + window.atob($(select).val()));
-            video.src = window.atob($(select).val());       //base 64 decode extracted url and play src
-            document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
+               //get next video in encoded form from quality dropdown value
+		if (OnKissCartoon()) {
+		var select = $(response).find('#my_video_1_html5_api').attr('src'); 
+			video.src = select;     //decodes using kisscartoon's decoder
+		}else{
+		var select = $(response).find('#my_video_1_html5_api option')[0];   
+			console.log("Next Video Src: " + window.atob($(select).val()));
+			video.src = window.atob($(select).val());       //base 64 decode extracted url and play src
+		}
+        document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
         },
         error: function (xhr, status, error) {
             // error in ajax
@@ -142,6 +159,47 @@ function getNextUrl(currentUrl)
     }
 }
 
+
+function OnKissCartoon()
+{	//check if on kisscarton
+	if(window.location.href.indexOf("kisscartoon") > -1) {
+    	return true;
+    }else{
+		return false;
+	}
+}
+
+
+function PrevOrNext(pon)
+{ 	//Goes to the next or previous page based off the currently selected episode
+	var url;
+	var element;
+	var to;
+	if (pon === "next"){
+		url = window.location.href;
+		element = document.getElementById("selectEpisode");
+		element.selectedIndex++;
+		to = url.lastIndexOf('/');
+		to = to == -1 ? url.length : to + 1;
+		Url = url.substring(0, to)  + element.options[element.selectedIndex].value;
+		console.log("url : " + Url);
+		window.location.href = Url;
+	}
+	if (pon === "prev") {
+		url = window.location.href;
+		element = document.getElementById("selectEpisode");
+		element.selectedIndex--;
+		to = url.lastIndexOf('/');
+		to = to == -1 ? url.length : to + 1;
+		Url = url.substring(0, to)  + element.options[element.selectedIndex].value;
+		console.log("url : " + Url);
+		window.location.href = Url;
+	}
+	if (pon != "prev" && pon != "next") {
+        console.log("Varible taken in PrevOrNext is invalid");
+	}
+}
+
 //->Recursive loop
 function resume()
 {
@@ -166,14 +224,11 @@ function resume()
     }
    
 }
-
 //->End loop
 
 //->DB
-
-//get the stored skip time from local storage if set
 function getStorage(){  
-	try{  
+	try{	//get the stored skip time from local storage if set  
     	if(typeof(Storage) !== "undefined") {
 			skipFrom = localStorage.getItem(animeName+"_skipFrom");
 			$("#skipFrom").val(skipFrom);
@@ -184,13 +239,17 @@ function getStorage(){
 	}
 }
 
-//user has clicked on button save credit skip time in local storage
+
 function setStorage()
-{
+{	//user has clicked on button save credit skip time in local storage
 	try{ 
     	if(typeof(Storage) !== "undefined") {
-    	skipFrom = $("#skipFrom").val(); 
-    	localStorage.setItem(animeName+"_skipFrom", skipFrom);
+    		skipFrom = $("#skipFrom").val();
+    		//check for valid input
+    		if(skipFrom.match('^[0-5][0-9]:[0-5][0-9]$') || skipFrom.match('^[0-9]:[0-5][0-9]:[0-5][0-9]$')){
+    		//store entered time in local storage
+    		localStorage.setItem(animeName+"_skipFrom", skipFrom);
+    		}
     	}
     }catch(e)
 	{
@@ -209,19 +268,18 @@ function removeStorage()
 		Console.log("Local storage not found");
 	}
 }
-
 //->END DB
 
-//create a form for user to submit skip time
+
 function createButton()
-{
-   $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='"+chrome.extension.getURL('icons/48.png')+"'/></div>");
+{	//create a form for user to submit skip time
+   $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='"+chrome.extension.getURL('/icons/48.png')+"'/></div>");
    
 }
 
-//convert video play time(float) to timestamp
+
 function getTime(totalSec)
-{
+{	//convert video play time(float) to timestamp
     var minutes = parseInt( totalSec / 60 ) % 60;
     var seconds = (totalSec % 60).toFixed(0);
     return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
@@ -229,45 +287,44 @@ function getTime(totalSec)
 
 function createOverlay()
 {
-createButton();
-$("#my_video_1").prepend("<div id='overlay'></div>");
+	createButton();
+	$(videoPlaceholder).prepend("<div id='overlay'></div>");
  
-  $("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
-  editMessage("<p>Thanks for using <a href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
-  "<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
+	$("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+	editMessage("<p>Thanks for using <a href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
+	"<p>Select a time to skip credits from:</p> <input id='skipFrom' placeholder='30:20'/>" +
                         "<button id='skipFromSubmit'>Submit</button><button id='removeSkip'>Remove</button>");
-  hideMessage();
-  getStorage();
+	hideMessage();
+	getStorage();
 }
 
 function createOverlay2()
 {
-$("#my_video_1").prepend("<div id='overlay2'>Next Video Playing in...</div>");
+	$(videoPlaceholder).prepend("<div id='overlay2'>Next Video Playing in...</div>");
  
-  $("body").append("<style>#overlay2 {position: absolute; left:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 200px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+	$("body").append("<style>#overlay2 {position: absolute; left:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 200px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
   
-  hideMessage2();
-  getStorage();
+	hideMessage2();
+	getStorage();
 }
 
 function editMessage(message)
 {
-
- var overlay= document.getElementById('overlay');
- overlay.style.visibility= 'visible';
- overlay.innerHTML = message;
+	var overlay= document.getElementById('overlay');
+	overlay.style.visibility= 'visible';
+	overlay.innerHTML = message;
 }
 
 function hideMessage()
 {
- var overlay= document.getElementById('overlay');
- overlay.style.visibility='hidden';
+	var overlay= document.getElementById('overlay');
+	overlay.style.visibility='hidden';
 }
 
 function hideMessage2()
 {
- var overlay= document.getElementById('overlay2');
- overlay.style.visibility='hidden';
+	var overlay= document.getElementById('overlay2');
+	overlay.style.visibility='hidden';
 }
 
 function endMessageCountdown()
@@ -276,7 +333,7 @@ return $.Deferred(function() {
     var self = this;
 	var overlay= document.getElementById('overlay2');
     overlay.style.visibility= 'visible';
-	var counter = 10;
+	var counter = 5;
 
 	var interval = setInterval(function() {
     counter--;
