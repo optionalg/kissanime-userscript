@@ -9,8 +9,8 @@ var videoPlaceholder = document.getElementById('divContentVideo');  //get curren
 var video = videoPlaceholder.getElementsByTagName('video')[0];
 
     //when video is ready to play add poster - prevents overlaping with default initial loading icon
-$(video).attr('poster', chrome.extension.getURL('icons/loading.gif'));  //add loading icon for pause between videos
-$('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
+$(video).attr('poster', chrome.extension.getURL('loading.gif'));  //add loading icon for pause between videos
+$('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src="+chrome.extension.getURL('48.png')+"/></div>");
 
 
 var link = document.createElement("link");
