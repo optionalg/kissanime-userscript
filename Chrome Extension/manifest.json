@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Kissanime Fullscreen - Auto-Play Next Video",
-  "version": "1.15",
+  "version": "1.16",
   "description": "Automatically plays the next video in the list without ever leaving fullscreen mode!",
   "author": "Matthew de Marillac",
   "icons": {
@@ -13,14 +13,14 @@
       "128": "128.png"
    },
   "permissions": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*", "storage"],
-  "web_accessible_resources":["loading.gif", "48.png"],
+  "web_accessible_resources":["loading.gif", "48.png", "AutoPlay.js", "materialize.css"],
   "page_action": {
     "default_title": "Kissanime Fullscreen - Auto-Play Next Video"
     },
     "content_scripts": [
     {
       "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
-      "js": ["bower_components/jquery/dist/jquery.min.js", "AutoPlay.js"]
+      "js": ["bower_components/jquery/dist/jquery.min.js", "injector.js"]
     }
   ]
 }

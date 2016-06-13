@@ -10,14 +10,14 @@
       "128": "icons/128.png"
    },
   "permissions": ["*://*.kissanime.to/anime/*", "*://*.kisscartoon.me/cartoon/*", "*://*.kissasian.com/drama/*"],
-  "web_accessible_resources":["icons/loading.gif", "icons/48.png"],
+  "web_accessible_resources":["icons/loading.gif", "icons/48.png", "AutoPlay.js", "materialize.css"],
   "page_action": {
     "default_title": "Kissanime Fullscreen - Auto-Play Next Video"
     },
     "content_scripts": [
     {
       "matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
-      "js": ["bower_components/jquery/dist/jquery.min.js", "AutoPlay.js"]
+      "js": ["bower_components/jquery/dist/jquery.min.js", "injector.js"]
     }
   ]
 }

@@ -369,4 +369,3 @@ return $.Deferred(function() {
 	}, 1000);
     });
 }
-
