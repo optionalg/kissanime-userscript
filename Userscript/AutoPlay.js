@@ -16,7 +16,7 @@
 // @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
 // @version     1.5.6
 // ==/UserScript==
-//Copyright 2016 Matthew de Marillac
+//Matthew de Marillac
 //Kissanime AutoPlayer
 var Url; //global variables
 var skipFrom;
