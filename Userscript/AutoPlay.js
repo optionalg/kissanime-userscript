@@ -9,12 +9,8 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
-// @include     http://matthewmarillac.com/api/*
-// @resource    materialize http://matthewmarillac.com/api/mt.css
-// @grant       GM_addStyle
-// @grant       GM_getResourceText
-// @updateURL   https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/meta.js
-// @version     1.5.6
+// @version     1.5.7
+// @grant       none
 // ==/UserScript==
 //Matthew de Marillac
 //Kissanime AutoPlayer
@@ -28,11 +24,9 @@ var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element vi
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
 
-var newCSS = GM_getResourceText ("materialize");
-GM_addStyle (newCSS);
-
 createOverlay();	//create interface
 createOverlay2();
+
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     setStorage();
 });
@@ -309,6 +303,7 @@ function getTime(totalSec)
 
 function createOverlay()
 {
+    injectCss('https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css');
 	createButton();
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
 
@@ -318,6 +313,17 @@ function createOverlay()
                         "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
 	hideMessage();
 	getStorage();
+}
+
+function injectCss(url)
+{
+    var head  = document.getElementsByTagName('head')[0];
+    var link  = document.createElement('link');
+    link.rel  = 'stylesheet';
+    link.type = 'text/css';
+    link.href = url;
+    link.media = 'all';
+    head.appendChild(link);
 }
 
 function createOverlay2()
