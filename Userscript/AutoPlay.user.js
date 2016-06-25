@@ -9,23 +9,28 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
+// @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
+// @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @version     1.5.7
-// @grant       none
+// @grant       GM_addStyle
+// @grant       GM_getResourceText
 // ==/UserScript==
 //Matthew de Marillac
 //Kissanime AutoPlayer
 var Url; //global variables
 var skipFrom;
 var itr = false;
-
+var active = true;
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
 
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
-
-createOverlay();	//create interface
-createOverlay2();
+//create interface
+var style = GM_getResourceText ("materialize");
+	GM_addStyle(style);
+	createOverlay();	//create interface
+	createOverlay2();
 
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     setStorage();
@@ -44,10 +49,17 @@ $("#skip-ol").on('click', function (event) {       //when video is ready to play
 $('html').on('click', function(event){
     if(event.target.id === "overlay"||
        event.target.parentElement.id === "overlay"|| $(event.target).is(':input') ||
-       event.target.id === "skip-ol"){}else
+       $(event.target).is('.lever') || event.target.id === "skip-ol"){}else
        {
            hideMessage();
        }
+});
+
+$('.active').on('click', function(){
+if (active === true)
+	active = false;
+else
+	active = true
 });
 
 $(video).on("playing", function(){
@@ -62,7 +74,7 @@ $(video).on('canplay', function (event) {       //when video is ready to play ad
 $(video).on('ended',function()
 {     //once video ended
     console.log("Kiss Anime Auto Play");
-    if(itr === false){
+    if(itr === false && active === true){
     	getNextInQue();
     }else{
         itr = false;
@@ -92,18 +104,6 @@ $(document.getElementById('btnNext').parentNode).on('click', function(event) {
 $(document.getElementById('btnPrevious').parentNode).on('click', function(event) {
 	event.preventDefault();
 	PrevOrNext("prev");
-});
-
-$("body").keydown(function(event) {     //when user clicks left or right key navigate back and foward
-  var element;
-  if (event.which == 39) {      //user presses right arrow button
-      element = document.getElementById('btnNext').parentNode;
-      window.location = element;        //reload page to next page
-  }
-  if (event.which == 37) {  //user presses left arrow button
-      element = document.getElementById('btnPrevious').parentNode;
-      window.location = element;    //reload page to previous page
-  }
 });
 
 function nextVideo(url){
@@ -226,7 +226,7 @@ function resume()
         return;
     });
 	//if skipping hasn't been set exit this function
-    if(skipFrom === "undefined" || skipFrom === "" || skipFrom === null)
+    if(skipFrom === "undefined" || skipFrom === "" || skipFrom === null || active === false)
     {
     return;
     }
@@ -303,27 +303,16 @@ function getTime(totalSec)
 
 function createOverlay()
 {
-    injectCss('https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css');
 	createButton();
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
 
 	$("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
 	editMessage("<div class='card-content white-text'><p>Thanks for using <a class='teal-text' href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
+	'<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
 	"<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
                         "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
 	hideMessage();
 	getStorage();
-}
-
-function injectCss(url)
-{
-    var head  = document.getElementsByTagName('head')[0];
-    var link  = document.createElement('link');
-    link.rel  = 'stylesheet';
-    link.type = 'text/css';
-    link.href = url;
-    link.media = 'all';
-    head.appendChild(link);
 }
 
 function createOverlay2()
