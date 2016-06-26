@@ -4,7 +4,7 @@ window.getAnime = function(url){
 
 nani.get('anime/'+url)
   .then(data => {
-    console.log(data);
+    return data;
   })
   .catch(error => {
     console.log(error);
