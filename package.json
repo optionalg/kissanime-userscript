@@ -9,6 +9,7 @@
     "jshint-stylish": "latest"
   },
   "dependencies": {
-    "bower": "^1.7.9"
+    "bower": "^1.7.9",
+    "nani": "^1.2.0"
   }
 }

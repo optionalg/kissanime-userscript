@@ -5,7 +5,7 @@ window.getAnime = function(url){
 
 nani.get('anime/'+url)
   .then(data => {
-    console.log(data);
+    return data;
   })
   .catch(error => {
     console.log(error);
@@ -17,7 +17,7 @@ window.searchAnime = function(url){
 
 nani.get('anime/search/'+url)
   .then(data => {
-    console.log(data);
+    return data;
   })
   .catch(error => {
     console.log(error);
