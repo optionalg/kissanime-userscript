@@ -10,6 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
+// @require     https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/anilist/bundle.js?v=4
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @version     1.5.8
 // @grant       GM_addStyle
@@ -21,11 +22,17 @@ var Url; //global variables
 var skipFrom;
 var itr = false;
 var active = true;
-var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
-var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
 
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
+
+var animeNameFiltered = animeName.replace(/-/g, ' ');
+console.log(animeNameFiltered);
+console.log(window.searchAnime(animeNameFiltered));
+
+var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
+var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
+
 //create interface
 var style = GM_getResourceText ("materialize");
 	GM_addStyle(style);
