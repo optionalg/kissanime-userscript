@@ -1,0 +1,16 @@
+{
+  "title": "Kissanime Fullscreen - Auto-Play Next Video",
+  "name": "kissanime_autoplay_mm",
+  "version": "1.0.6",
+  "description": "Automatically plays the next video in the list without ever leaving fullscreen mode!",
+  "main": "index.js",
+  "icon": "icon.png",
+  "icon64": "icon64.png",
+  "author": "Matthew de Marillac",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "GNU",
+"permissions": {"private-browsing": true, "multiprocess": true}
+}
