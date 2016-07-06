@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
-// @require     https://github.com/mattmarillac/kissanime-userscript/raw/master/Userscript/anilist/bundle.js?v=4
+// @require     https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/anilist/bundle.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @version     1.5.8
 // @grant       GM_addStyle
@@ -31,13 +31,14 @@ console.log(animeNameFiltered);
 console.log(window.searchAnime(animeNameFiltered));
 
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
+if(typeof videoPlaceholder !== 'undefined'){
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
-
 //create interface
 var style = GM_getResourceText ("materialize");
 	GM_addStyle(style);
 	createOverlay();	//create interface
 	createOverlay2();
+}
 
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     setStorage();
@@ -74,6 +75,7 @@ $(video).on("playing", function(){
     resume();
 });
 
+if(typeof video !== 'undefined'){
 $(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     $(video).attr('poster', "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/loading.gif");  //add loading icon for pause between videos
 });
@@ -87,6 +89,7 @@ $(video).on('ended',function()
         itr = false;
     }
 });
+}
 
 function getNextInQue(){
     var element = document.getElementById('btnNext').parentNode;
@@ -98,7 +101,6 @@ function getNextInQue(){
     {   //otherwise we move foward with previous ajax requested page
         getNextUrl(Url);
     }
-
 }
 
 //When the user clicks on the next button, goes to the next video from the current selected index
