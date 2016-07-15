@@ -10,7 +10,6 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
-// @require     https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/anilist/bundle.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @version     1.5.8
 // @grant       GM_addStyle
@@ -25,10 +24,6 @@ var active = true;
 
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
-
-var animeNameFiltered = animeName.replace(/-/g, ' ');
-console.log(animeNameFiltered);
-console.log(window.searchAnime(animeNameFiltered));
 
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 if(typeof videoPlaceholder !== 'undefined'){
@@ -118,7 +113,6 @@ $(document.getElementById('btnPrevious').parentNode).on('click', function(event)
 function nextVideo(url){
     // request video URL
     console.log("Searching for video at: " + url);
-    $.when(endMessageCountdown()).done(function(){
     $.ajax({
         type: "GET",
         url: url,
@@ -140,8 +134,7 @@ function nextVideo(url){
             // error in ajax
             console.log(error);
         }
-        });
-}); // ready
+});
 }
 
 function getNextUrl(currentUrl)
@@ -247,6 +240,10 @@ function resume()
     //recurse loop every second video playes
     setTimeout(resume, 1000);
     }
+    if((video.currentTime - video.duration) === 5 || (video.cuurentTime -s kipFrom) ===5)
+    {
+    	endMessageCountdown()
+    }
 
 }
 //->End loop
@@ -326,7 +323,7 @@ function createOverlay()
 
 function createOverlay2()
 {
-	$(videoPlaceholder).prepend("<div id='overlay2'>Next Video Playing in...</div>");
+	$(video).prepend("<div id='overlay2'>Next Video Playing in...</div>");
 
 	$("body").append("<style>#overlay2 {position: absolute; left:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 200px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
 
@@ -355,8 +352,6 @@ function hideMessage2()
 
 function endMessageCountdown()
 {
-return $.Deferred(function() {
-    var self = this;
 	var overlay= document.getElementById('overlay2');
     overlay.style.visibility= 'visible';
 	var counter = 5;
@@ -371,5 +366,4 @@ return $.Deferred(function() {
         self.resolve();
     }
 	}, 1000);
-    });
 }
