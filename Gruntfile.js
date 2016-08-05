@@ -21,7 +21,7 @@ module.exports = function(grunt) {
       },
 
       // when this task is run, lint the Gruntfile and all js files in src
-      build: ['Gruntfile.js', 'Userscript/AutoPlay.js']
+      build: ['Gruntfile.js', 'Userscript/AutoPlay.user.js']
     },
 	compass: {
 	   dist: {

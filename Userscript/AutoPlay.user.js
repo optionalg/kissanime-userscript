@@ -26,7 +26,7 @@ var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
 
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
-if(typeof videoPlaceholder !== 'undefined'){
+if(typeof videoPlaceholder !== 'undefined' && videoPlaceholder !== 'null'){
 var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
 //create interface
 var style = GM_getResourceText ("materialize");
@@ -62,7 +62,7 @@ $('.active').on('click', function(){
 if (active === true)
 	active = false;
 else
-	active = true
+	active = true;
 });
 
 $(video).on("playing", function(){
@@ -70,14 +70,13 @@ $(video).on("playing", function(){
     resume();
 });
 
-if(typeof video !== 'undefined'){
+if(typeof video !== 'undefined' && video !== 'null'){
 $(video).on('canplay', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
     $(video).attr('poster', "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/loading.gif");  //add loading icon for pause between videos
 });
 
 $(video).on('ended',function()
 {     //once video ended
-    console.log("Kiss Anime Auto Play");
     if(itr === false && active === true){
     	getNextInQue();
     }else{
@@ -112,7 +111,6 @@ $(document.getElementById('btnPrevious').parentNode).on('click', function(event)
 
 function nextVideo(url){
     // request video URL
-    console.log("Searching for video at: " + url);
     $.when(endMessageCountdown()).done(function(){
     $.ajax({
         type: "GET",
@@ -122,10 +120,8 @@ function nextVideo(url){
         {
             var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
 		if (OnKissCartoon()) {
-			console.log("Next Video Src: " + $kissenc.decrypt($(select).val()));
 			video.src = $kissenc.decrypt($(select).val());     //decodes using kisscartoon's decoder
 		}else{
-			console.log("Next Video Src: " + window.atob($(select).val()));
 			video.src = window.atob($(select).val());       //base 64 decode extracted url and play src
 		}
 	video.play();
@@ -150,7 +146,6 @@ function getNextUrl(currentUrl)
             return;
             }
 
-            console.log("Next Url: " + element.href);
             history.pushState({}, '', element.href);    //add page to history so users can keep track of what anime they have seen
             Url = element.href;     //asign video to current video global variable
             nextVideo(element.href);
@@ -166,7 +161,6 @@ function getNextUrl(currentUrl)
             {
                 var select = $(response).find('img#btnNext').parent();
                 nextUrl = $(select).attr("href");       //get url of next video from button href from within ajax request
-                console.log("Next Url: " + nextUrl);
                 history.pushState({}, '', $(select).attr("href"));  //add page to history so users can keep track of what anime they have seen
                 Url = nextUrl;      //asign video to current video global variable
                 nextVideo(nextUrl);
@@ -202,7 +196,6 @@ function PrevOrNext(pon)
 		to = url.lastIndexOf('/');
 		to = to == -1 ? url.length : to + 1;
 		Url = url.substring(0, to)  + element.options[element.selectedIndex].value;
-		console.log("url : " + Url);
 		window.location.href = Url;
 	}
 	if (pon === "prev") {
@@ -212,7 +205,6 @@ function PrevOrNext(pon)
 		to = url.lastIndexOf('/');
 		to = to == -1 ? url.length : to + 1;
 		Url = url.substring(0, to)  + element.options[element.selectedIndex].value;
-		console.log("url : " + Url);
 		window.location.href = Url;
 	}
 	if (pon != "prev" && pon != "next") {
@@ -296,7 +288,6 @@ function createButton()
    $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
 
 }
-
 
 function getTime(totalSec)
 {	//convert video play time(float) to timestamp
