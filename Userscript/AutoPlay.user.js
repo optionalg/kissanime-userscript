@@ -11,7 +11,7 @@
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.5.8
+// @version     1.5.9
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
