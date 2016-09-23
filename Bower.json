@@ -3,6 +3,7 @@
   "description": "Web Extension enhancing native payer functionality",
   "version": "1.4",
   "dependencies": {
-    "jquery": "*"
+    "jquery": "*",
+    "underscore": "^1.8.3"
   }
 }
