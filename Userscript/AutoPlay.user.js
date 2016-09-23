@@ -10,8 +10,9 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
+// @require     https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Chrome%20Extension/bower_components/underscore/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7
+// @version     1.7.1
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -118,12 +119,12 @@ function nextVideo(url){
 		{
 			var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
 		if (OnKissCartoon()) {
-			video.src = $kissenc.decrypt($(select).val());     //decodes using kisscartoon's decoder
+			video.src = $kissenc.decrypt(_.escape($(select).val()));     //decodes using kisscartoon's decoder
 		}else{
-			video.src = window.atob($(select).val());       //base 64 decode extracted url and play src
+			video.src = window.atob(_.escape($(select).val()));       //base 64 decode extracted url and play src
 		}
-	video.play();
-		document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
+			video.play();
+			document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
 		},
 		error: function (xhr, status, error) {
 			// error in ajax
@@ -143,8 +144,8 @@ function getNextUrl(currentUrl)
 			return;
 			}
 
-			history.pushState({}, '', element.href);    //add page to history so users can keep track of what anime they have seen
-			Url = element.href;     //asign video to current video global variable
+			history.pushState({}, '', _.escape(element.href));    //add page to history so users can keep track of what anime they have seen
+			Url = _.escape(element.href);     //asign video to current video global variable
 			nextVideo(element.href);
 	}
 	else
@@ -157,8 +158,8 @@ function getNextUrl(currentUrl)
 			success: function (response)
 			{
 				var select = $(response).find('img#btnNext').parent();
-				nextUrl = $(select).attr("href");       //get url of next video from button href from within ajax request
-				history.pushState({}, '', $(select).attr("href"));  //add page to history so users can keep track of what anime they have seen
+				nextUrl = _.escape($(select).attr("href"));       //get url of next video from button href from within ajax request
+				history.pushState({}, '', _.escape($(select).attr("href")));  //add page to history so users can keep track of what anime they have seen
 				Url = nextUrl;      //asign video to current video global variable
 				nextVideo(nextUrl);
 			},
