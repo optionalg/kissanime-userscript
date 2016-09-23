@@ -12,7 +12,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
 // @require     https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Chrome%20Extension/bower_components/underscore/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7
+// @version     1.7.1
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -119,12 +119,12 @@ function nextVideo(url){
 		{
 			var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
 		if (OnKissCartoon()) {
-			video.src = _.escape($kissenc.decrypt($(select).val()));     //decodes using kisscartoon's decoder
+			video.src = $kissenc.decrypt(_.escape($(select).val()));     //decodes using kisscartoon's decoder
 		}else{
-			video.src = _.escape(window.atob($(select).val()));       //base 64 decode extracted url and play src
+			video.src = window.atob(_.escape($(select).val()));       //base 64 decode extracted url and play src
 		}
-	video.play();
-		document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
+			video.play();
+			document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
 		},
 		error: function (xhr, status, error) {
 			// error in ajax
@@ -240,7 +240,7 @@ function resume()
 function getStorage(){
 	try{	//get the stored skip time from local storage if set
 		if(typeof(Storage) !== "undefined") {
-			skipFrom = _.escape(localStorage.getItem(animeName+"_skipFrom"));
+			skipFrom = localStorage.getItem(animeName+"_skipFrom");
 			$("#skipFrom").val(skipFrom);
 		}
 	}catch(e)
