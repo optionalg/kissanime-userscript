@@ -20,7 +20,7 @@
 		"content_scripts": [
 		{
 			"matches": ["*://*.kissanime.to/*", "*://*.kisscartoon.me/*", "*://*.kissasian.com/*"],
-			"js": ["bower_components/jquery/dist/jquery.min.js", "injector.js"]
+			"js": ["jquery.min.js", "injector.js"]
 		}
 	]
 }

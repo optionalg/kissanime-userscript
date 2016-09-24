@@ -1,9 +1,10 @@
 {
   "name": "Userscript bower",
-  "description": "Web Extension enhancing native payer functionality",
+  "description": "Web Extension enhancing native player functionality",
   "version": "1.4",
   "dependencies": {
     "jquery": "*",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "materialize": "^0.97.7"
   }
 }
