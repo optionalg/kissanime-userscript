@@ -3,7 +3,7 @@
 
 cd ../Chrome\ Extension;
 echo "Reading chrome manifest version file:";
-ver=`cat manifest.json | grep "version" | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | sed -n "2p"`;
+ver=`cat manifest.json | grep "\"version\"" | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | sed -n "1p"`;
 echo "${ver} found!...";
 
 echo "Cleaning rubish files...";
