@@ -10,7 +10,7 @@
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
-// @require     https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/underscore-min.js
+// @require     https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @version     1.7.2
 // @grant       GM_addStyle
