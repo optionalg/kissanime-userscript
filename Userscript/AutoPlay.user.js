@@ -13,27 +13,24 @@
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @version     1.7.3
-
-
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
 //Matthew de Marillacs
 //Kissanime AutoPlayer
+
 var Url; //global variables
 var skipFrom;
 var itr = false;
 var active = true;
-
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
-
 var templates = templates();
-
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 if(typeof videoPlaceholder !== 'undefined' && videoPlaceholder !== 'null'){
 var ref;
 var video = (ref = videoPlaceholder.getElementsByTagName('video')) !== null ? ref[0] : void 0;  //get element video from previous elements child
+
 //create interface
 var style = GM_getResourceText ("materialize");
 	GM_addStyle(style);
