@@ -112,9 +112,9 @@ function templates(){
     var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
     var innerstyle = _.template("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
     //-> end templates
-    return {'ol': ol(),
-            'bar': bar(),
-            'innerstyle':innerstyle()
+    return {'ol': ol,
+            'bar': bar,
+            'innerstyle':innerstyle
            };
 }
 
@@ -378,7 +378,7 @@ function setResolution(quality)
 
 function createButton()
 {	//create a form for user to submit skip time
-    $('.vjs-control-bar').append(templates.bar);
+    $('.vjs-control-bar').append(templates.bar());
 
 }
 
@@ -386,8 +386,8 @@ function createOverlay()
 {
 	createButton();
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
-	$("body").append(templates.innerstyle);
-	editMessage(templates.ol);
+	$("body").append(templates.innerstyle());
+	editMessage(templates.ol());
 	hideMessage();
 	getStorage();
     getResolution();
