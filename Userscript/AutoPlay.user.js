@@ -9,14 +9,16 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissasian.com/*
-// @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js 
+// @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.2
+// @version     1.7.3
+
+
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
-//Matthew de Marillac
+//Matthew de Marillacs
 //Kissanime AutoPlayer
 var Url; //global variables
 var skipFrom;
@@ -28,12 +30,18 @@ var animeName = params[1];
 
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 if(typeof videoPlaceholder !== 'undefined' && videoPlaceholder !== 'null'){
-var video = videoPlaceholder.getElementsByTagName('video')[0];  //get element video from previous elements child
+var ref;
+var video = (ref = videoPlaceholder.getElementsByTagName('video')) !== null ? ref[0] : void 0;  //get element video from previous elements child
 //create interface
 var style = GM_getResourceText ("materialize");
 	GM_addStyle(style);
 	createOverlay();	//create interface
 }
+
+$.ajaxSetup({
+	timeout: 3000, 
+	retryAfter:7000
+});
 
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
 	setStorage();
@@ -43,10 +51,19 @@ $("#removeSkip").on('click', function (event) {       //when video is ready to p
 	removeStorage();
 });
 
+function buttonFeedback(){
+	$("#overlay p,input, button").fadeIn(100).fadeOut(100).fadeIn(100);
+}
+
 $("#skip-ol").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
 	var overlay= document.getElementById('overlay');
 	overlay.style.visibility= 'visible';
 	event.stopPropagation();
+});
+
+$('#selectQuality').on('change', function(e) {
+  quality = $("#selectQuality option:selected").html();
+  setResolution(quality);
 });
 
 $('html').on('click', function(event){
@@ -117,7 +134,15 @@ function nextVideo(url){
 		cache: false,
 		success: function (response)
 		{
-			var select = $(response).find('#selectQuality option')[0];      //get next video in encoded form from quality dropdown value
+			var select;
+			var res = findResolution($(response).find('#selectQuality option'));
+			if(res !== false && typeof res !== 'undefined' && res !== null){
+				select = $(res);
+			}
+			else{
+				select = $(response).find('#selectQuality option')[0];
+			}
+			    //get next video in encoded form from quality dropdown value
 		if (OnKissCartoon()) {
 			video.src = $kissenc.decrypt(_.escape($(select).val()));     //decodes using kisscartoon's decoder
 		}else{
@@ -129,6 +154,7 @@ function nextVideo(url){
 		error: function (xhr, status, error) {
 			// error in ajax
 			console.log(error);
+			setTimeout ( function(){ getNextUrl(currentUrl); }, $.ajaxSetup().retryAfter );
 		}
 		});
 }
@@ -166,11 +192,21 @@ function getNextUrl(currentUrl)
 			error: function (xhr, status, error) {
 				// error in ajax
 				console.log(error);
+				setTimeout ( function(){ getNextUrl(currentUrl); }, $.ajaxSetup().retryAfter );
 			}
 		 });
 	}
 }
 
+function findResolution(option){
+    var res;
+    _.each(option, function(opt){
+		if($(opt).text() === getResolution()){
+			res = opt;
+		}
+	});
+    return res;
+}
 
 function OnKissCartoon()
 {	//check if on kisscarton
@@ -258,7 +294,13 @@ function setStorage()
 			//check for valid input
 			if(skipFrom.match('^[0-5][0-9]:[0-5][0-9]$') || skipFrom.match('^[0-9]:[0-5][0-9]:[0-5][0-9]$')){
 			//store entered time in local storage
+			buttonFeedback();
 			localStorage.setItem(animeName+"_skipFrom", skipFrom);
+			}
+			else{
+				$("#skipFrom").val();
+				$("#skipFrom").val('Invalid Number: format is h:mm:ss');
+				_.delay(function() { $("#skipFrom").val(''); }, 3000);
 			}
 		}
 	}catch(e)
@@ -273,13 +315,43 @@ function removeStorage()
 		localStorage.removeItem(animeName+"_skipFrom");
 		skipFrom = null;
 		getStorage();
+		buttonFeedback();
 	}catch(e)
 	{
 		Console.log("Local storage not found");
 	}
 }
-//->END DB
 
+function getResolution(){
+	try{	//get the stored skip time from local storage if set
+		if(typeof(Storage) !== "undefined") {
+			var stor = localStorage.getItem(animeName+"_quality");
+			var res = $('#selectQuality option');
+            $('#selectQuality option:selected').removeAttr('selected');
+            _.each(res, function(opt){
+                if($(opt).text() === stor)
+                $(opt).attr('selected', '');
+            });
+		}
+	}catch(e)
+	{
+		Console.log("Local storage not found");
+	}
+}
+
+function setResolution(quality)
+{	//user has clicked on button save credit skip time in local storage
+	try{
+		if(typeof(Storage) !== "undefined") {
+			//check for valid input
+			localStorage.setItem(animeName+"_quality", quality);
+		}
+	}catch(e)
+	{
+		Console.log(e);
+	}
+}
+//->END DB
 
 function createButton()
 {	//create a form for user to submit skip time
@@ -306,6 +378,7 @@ function createOverlay()
 						"<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
 	hideMessage();
 	getStorage();
+    getResolution();
 }
 
 function editMessage(message)
