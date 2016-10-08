@@ -28,6 +28,8 @@ var active = true;
 var params = window.location.pathname.split('/').slice(1);
 var animeName = params[1];
 
+var templates = templates();
+
 var videoPlaceholder = document.getElementById('divContentVideo');  //get current video parent
 if(typeof videoPlaceholder !== 'undefined' && videoPlaceholder !== 'null'){
 var ref;
@@ -100,6 +102,20 @@ $(video).on('ended',function()
 		itr = false;
 	}
 });
+}
+
+function templates(){
+    var ol = _.template("<div class='card-content white-text'><p>Thanks for using <a class='teal-text' href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
+                        '<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
+                        "<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
+                        "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
+    var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
+    var innerstyle = _.template("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
+    //-> end templates
+    return {'ol': ol(),
+            'bar': bar(),
+            'innerstyle':innerstyle()
+           };
 }
 
 function getNextInQue(){
@@ -272,6 +288,13 @@ function resume()
 }
 //->End loop
 
+function getTime(totalSec)
+{	//convert video play time(float) to timestamp
+	var minutes = parseInt( totalSec / 60 ) % 60;
+	var seconds = (totalSec % 60).toFixed(0);
+	return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
+}
+
 //->DB
 function getStorage(){
 	try{	//get the stored skip time from local storage if set
@@ -355,27 +378,16 @@ function setResolution(quality)
 
 function createButton()
 {	//create a form for user to submit skip time
-   $('.vjs-control-bar').append("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
+    $('.vjs-control-bar').append(templates.bar);
 
-}
-
-function getTime(totalSec)
-{	//convert video play time(float) to timestamp
-	var minutes = parseInt( totalSec / 60 ) % 60;
-	var seconds = (totalSec % 60).toFixed(0);
-	return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
 }
 
 function createOverlay()
 {
 	createButton();
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
-
-	$("body").append("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
-	editMessage("<div class='card-content white-text'><p>Thanks for using <a class='teal-text' href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
-	'<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
-	"<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
-						"<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
+	$("body").append(templates.innerstyle);
+	editMessage(templates.ol);
 	hideMessage();
 	getStorage();
     getResolution();
@@ -393,4 +405,3 @@ function hideMessage()
 	var overlay= document.getElementById('overlay');
 	overlay.style.visibility='hidden';
 }
-
