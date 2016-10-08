@@ -12,7 +12,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3
+// @version     1.7.3.1
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -167,7 +167,7 @@ function nextVideo(url){
 		error: function (xhr, status, error) {
 			// error in ajax
 			console.log(error);
-			setTimeout ( function(){ getNextUrl(currentUrl); }, $.ajaxSetup().retryAfter );
+			setTimeout ( function(){ nextVideo(url); }, $.ajaxSetup().retryAfter );
 		}
 		});
 }
