@@ -41,8 +41,8 @@ module.exports = function(grunt) {
 			 {expand: true, src: ['bower_components/jquery/dist/jquery.min.js'], flatten: true, dest: 'Opera Extension/', filter: 'isFile'},
 			 {expand: true, src: ['bower_components/underscore/underscore-min.js'], flatten: true, dest: 'Chrome Extension/', filter: 'isFile'},
 			 {expand: true, src: ['bower_components/underscore/underscore-min.js'], flatten: true, dest: 'Opera Extension/', filter: 'isFile'},
-			 {expand: true, src: ['Userscript/materialize.css'], flatten: true, dest: 'Chrome Extension/', filter: 'isFile'}
-			 {expand: true, src: ['Userscript/materialize.css'], flatten: true, dest: 'Opera Extension/', filter: 'isFile'}
+			 {expand: true, src: ['Userscript/materialize.css'], flatten: true, dest: 'Chrome Extension/', filter: 'isFile'},
+			 {expand: true, src: ['Userscript/materialize.css'], flatten: true, dest: 'Opera Extension/', filter: 'isFile'},
 			 {expand: true, src: ['bower_components/materialize/sass/components/**'], flatten: true, dest: 'Userscript/materialize-src/sass/components/'},
 			],
 	},
