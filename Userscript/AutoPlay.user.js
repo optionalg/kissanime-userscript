@@ -39,7 +39,7 @@ var style = GM_getResourceText ("materialize");
 
 $.ajaxSetup({
 	timeout: 3000, 
-	retryAfter:3000
+	retryAfter:4000
 });
 
 $("#skipFromSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
