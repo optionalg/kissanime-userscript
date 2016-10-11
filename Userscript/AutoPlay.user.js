@@ -12,7 +12,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.2
+// @version     1.7.3.4
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -106,7 +106,7 @@ function templates(){
                         '<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
                         "<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
                         "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
-    var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://github.com/mattmarillac/kissanime-userscript/raw/master/Chrome%20Extension/48.png'/></div>");
+    var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon.png'/></div>");
     var innerstyle = _.template("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
     //-> end templates
     return {'ol': ol,
