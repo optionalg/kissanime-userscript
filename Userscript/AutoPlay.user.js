@@ -12,7 +12,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.4
+// @version     1.7.3.5
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -102,7 +102,7 @@ $(video).on('ended',function()
 }
 
 function templates(){
-    var ol = _.template("<div class='card-content white-text'><p>Thanks for using <a class='teal-text' href='matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
+    var ol = _.template("<div class='card-content white-text'><p>Thanks for using <a class='teal-text' href='http://www.matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
                         '<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
                         "<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
                         "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
