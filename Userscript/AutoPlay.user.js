@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        KissAnime Auto Play Next Episode
 // @description Automatically plays the next video in the list without ever leaving fullscreen mode! Works on Kissanime/kisscartoon/kissasian
-// @icon        https://github.com/mattmarillac/kissanime-userscript/blob/master/Chrome%20Extension/128.png?raw=true
+// @icon        http://kissanime.to/Content/images/favicon.ico
 // @locale      en
 // @namespace   matthewmarillac.com
 // @author      Matthew James de Marillac
@@ -12,7 +12,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.5
+// @version     1.7.3.6
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
