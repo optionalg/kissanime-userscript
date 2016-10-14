@@ -12,7 +12,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.7
+// @version     1.7.3.8
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -176,7 +176,7 @@ function getNextUrl(currentUrl){   //get the next videos url from an ajax reques
 	if(currentUrl == "init")
 	{//this is the first video in the que - get the next page from current page link
 			var element = document.getElementById('btnNext').parentNode;    //get url of next video from button href
-			if(element===null || typeof(element)==='undefined' element==='')
+			if(element===null || typeof(element)==='undefined' || element==='')
 			{
 				console.log("No more videos in series");
 				return;
@@ -365,13 +365,14 @@ function setResolution(quality){	//user has clicked on button save credit skip t
 //->END DB
 
 function createButton(){	//create a form for user to submit skip time
-	daily_icon = {icon: dailyIcon()}
+	daily_icon = {icon: dailyIcon()};
     $('.vjs-control-bar').append(templates.bar(daily_icon));
 
 }
 
 function createOverlay(){
 	createButton();
+	$("#selectPlayer").parent().hide();		//remove select player - flash not supported!
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
 	$("body").append(templates.innerstyle());
 	editMessage(templates.ol());
