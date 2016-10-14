@@ -106,7 +106,7 @@ function templates(){
                         '<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
                         "<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
                         "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
-    var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon.png'/></div>");
+    var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='<% icon %>'/></div>");
     var innerstyle = _.template("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
     //-> end templates
     return {'ol': ol,
@@ -375,7 +375,7 @@ function setResolution(quality)
 
 function createButton()
 {	//create a form for user to submit skip time
-    $('.vjs-control-bar').append(templates.bar());
+    $('.vjs-control-bar').append(templates.bar(icon: dailyIcon()));
 
 }
 
@@ -402,3 +402,22 @@ function hideMessage()
 	var overlay= document.getElementById('overlay');
 	overlay.style.visibility='hidden';
 }
+
+function dailyIcon(){
+	switch (new Date().getDay()) {
+	    case 1:
+	    case 2:
+	    	return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon3.png"
+	        break;
+	    case 3:
+	    case 4:
+	    case 5:
+	        return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon.png"
+	        break;
+	    case 0:
+	    case 6:
+	        return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon2.png";
+	        break;
+	}
+}
+
