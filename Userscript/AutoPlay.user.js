@@ -12,7 +12,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.6
+// @version     1.7.3.7
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -106,7 +106,7 @@ function templates(){
                         '<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
                         "<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
                         "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
-    var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='<% icon %>'/></div>");
+    var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='<%= icon %>'/></div>");
     var innerstyle = _.template("<style>#overlay {position: absolute; right:0; bottom: 35px; color: #FFF; text-align: center; font-size: 20px; background-color: rgba(7, 20, 30, 0.7); width: 640px; padding: 10px 0; z-index: 2147483647; border: 2px solid rgba(128, 128, 128, 0.35);}</style>");
     //-> end templates
     return {'ol': ol,
@@ -172,15 +172,14 @@ function nextVideo(url){
 		});
 }
 
-function getNextUrl(currentUrl)
-{   //get the next videos url from an ajax request by reading href of next link on that page
+function getNextUrl(currentUrl){   //get the next videos url from an ajax request by reading href of next link on that page
 	if(currentUrl == "init")
 	{//this is the first video in the que - get the next page from current page link
 			var element = document.getElementById('btnNext').parentNode;    //get url of next video from button href
-			if(element===null)
+			if(element===null || typeof(element)==='undefined' element==='')
 			{
-			console.log("No more videos in series");
-			return;
+				console.log("No more videos in series");
+				return;
 			}
 
 			history.pushState({}, '', _.escape(element.href));    //add page to history so users can keep track of what anime they have seen
@@ -221,8 +220,7 @@ function findResolution(option){
     return res;
 }
 
-function OnKissCartoon()
-{	//check if on kisscarton
+function OnKissCartoon(){	//check if on kisscarton
 	if(window.location.href.indexOf("kisscartoon") > -1) {
 		return true;
 	}else{
@@ -231,8 +229,7 @@ function OnKissCartoon()
 }
 
 
-function PrevOrNext(pon)
-{ 	//Goes to the next or previous page based off the currently selected episode
+function PrevOrNext(pon){ 	//Goes to the next or previous page based off the currently selected episode
 	var url;
 	var element;
 	var to;
@@ -260,8 +257,7 @@ function PrevOrNext(pon)
 }
 
 //->Recursive loop
-function resume()
-{
+function resume(){
 	$(video).on('ended', function (event) {
 		return;
 	});
@@ -271,7 +267,7 @@ function resume()
 	//if skipping hasn't been set exit this function
 	if(skipFrom === "undefined" || skipFrom === "" || skipFrom === null || active === false)
 	{
-	return;
+		return;
 	}
 	//if current video time matches stored skipping time trigger video ended event handler
 	if(getTime(video.currentTime) === skipFrom && itr === false){
@@ -279,43 +275,40 @@ function resume()
 		getNextInQue();
 	}else{
 	//recurse loop every second video playes
-	setTimeout(resume, 1000);
+		setTimeout(resume, 1000);
 	}
 
 }
 //->End loop
 
-function getTime(totalSec)
-{	//convert video play time(float) to timestamp
+function getTime(totalSec){	//convert video play time(float) to timestamp
 	var minutes = parseInt( totalSec / 60 ) % 60;
 	var seconds = (totalSec % 60).toFixed(0);
 	return((minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds));
 }
 
 //->DB
-function getStorage(){
-	try{	//get the stored skip time from local storage if set
+function getStorage(){	try{	//get the stored skip time from local storage if set
 		if(typeof(Storage) !== "undefined") {
 			skipFrom = localStorage.getItem(animeName+"_skipFrom");
 			$("#skipFrom").val(skipFrom);
 		}
 	}catch(e)
 	{
-		Console.log("Local storage not found");
+		console.log("Local storage not found");
 	}
 }
 
 
-function setStorage()
-{	//user has clicked on button save credit skip time in local storage
+function setStorage(){	//user has clicked on button save credit skip time in local storage
 	try{
 		if(typeof(Storage) !== "undefined") {
 			skipFrom = $("#skipFrom").val();
 			//check for valid input
 			if(skipFrom.match('^[0-5][0-9]:[0-5][0-9]$') || skipFrom.match('^[0-9]:[0-5][0-9]:[0-5][0-9]$')){
 			//store entered time in local storage
-			buttonFeedback();
-			localStorage.setItem(animeName+"_skipFrom", skipFrom);
+				buttonFeedback();
+				localStorage.setItem(animeName+"_skipFrom", skipFrom);
 			}
 			else{
 				$("#skipFrom").val();
@@ -325,12 +318,11 @@ function setStorage()
 		}
 	}catch(e)
 	{
-		Console.log(e);
+		console.log(e);
 	}
 }
 
-function removeStorage()
-{
+function removeStorage(){
 	try{
 		localStorage.removeItem(animeName+"_skipFrom");
 		skipFrom = null;
@@ -338,7 +330,7 @@ function removeStorage()
 		buttonFeedback();
 	}catch(e)
 	{
-		Console.log("Local storage not found");
+		console.log("Local storage not found");
 	}
 }
 
@@ -355,12 +347,11 @@ function getResolution(){
 		}
 	}catch(e)
 	{
-		Console.log("Local storage not found");
+		console.log("Local storage not found");
 	}
 }
 
-function setResolution(quality)
-{	//user has clicked on button save credit skip time in local storage
+function setResolution(quality){	//user has clicked on button save credit skip time in local storage
 	try{
 		if(typeof(Storage) !== "undefined") {
 			//check for valid input
@@ -373,14 +364,13 @@ function setResolution(quality)
 }
 //->END DB
 
-function createButton()
-{	//create a form for user to submit skip time
-    $('.vjs-control-bar').append(templates.bar(icon: dailyIcon()));
+function createButton(){	//create a form for user to submit skip time
+	daily_icon = {icon: dailyIcon()}
+    $('.vjs-control-bar').append(templates.bar(daily_icon));
 
 }
 
-function createOverlay()
-{
+function createOverlay(){
 	createButton();
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
 	$("body").append(templates.innerstyle());
@@ -390,15 +380,13 @@ function createOverlay()
     getResolution();
 }
 
-function editMessage(message)
-{
+function editMessage(message){
 	var overlay= document.getElementById('overlay');
 	overlay.style.visibility= 'visible';
 	overlay.innerHTML = message;
 }
 
-function hideMessage()
-{
+function hideMessage(){
 	var overlay= document.getElementById('overlay');
 	overlay.style.visibility='hidden';
 }
@@ -407,17 +395,14 @@ function dailyIcon(){
 	switch (new Date().getDay()) {
 	    case 1:
 	    case 2:
-	    	return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon3.png"
-	        break;
+	    	return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon3.png";
 	    case 3:
 	    case 4:
 	    case 5:
-	        return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon.png"
-	        break;
+	        return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon.png";
 	    case 0:
 	    case 6:
 	        return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon2.png";
-	        break;
 	}
 }
 
