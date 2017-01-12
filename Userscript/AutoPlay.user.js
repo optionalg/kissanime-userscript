@@ -8,11 +8,12 @@
 // @include     *://kissanime.com/*
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
+// @include     *://kissanime.se/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.8
+// @version     1.7.3.9
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
