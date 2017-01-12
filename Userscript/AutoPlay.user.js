@@ -9,6 +9,7 @@
 // @include     *://kisscartoon.me/*
 // @include     *://kissanime.to/*
 // @include     *://kissanime.se/*
+// @include     *://kissanime.ru/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
