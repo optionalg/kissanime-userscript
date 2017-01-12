@@ -7,14 +7,14 @@
 // @author      Matthew James de Marillac
 // @include     *://kissanime.com/*
 // @include     *://kisscartoon.me/*
+// @include     *://kisscartoon.se/*
 // @include     *://kissanime.to/*
-// @include     *://kissanime.se/*
 // @include     *://kissanime.ru/*
 // @include     *://kissasian.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.91
+// @version     1.7.3.92
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
