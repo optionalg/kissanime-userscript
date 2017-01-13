@@ -14,7 +14,7 @@
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
-// @version     1.7.3.92
+// @version     1.7.4.0
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -68,12 +68,19 @@ $('#selectQuality').on('change', function(e) {
 });
 
 $('html').on('click', function(event){
-	if(event.target.id === "overlay"||
-	   event.target.parentElement.id === "overlay"|| $(event.target).is(':input') ||
-	   $(event.target).is('.lever') || event.target.id === "skip-ol"){}else
-	   {
-		   hideMessage();
-	   }
+	try{
+		if(event.target.id === "overlay"||
+		event.target.parentElement.id === "overlay"|| $(event.target).is(':input') ||
+		$(event.target).is('.lever') || event.target.id === "skip-ol"){
+			// do nothing, TODO: refractor this condition
+		} else
+	    {
+		    hideMessage();
+	    }
+	 }catch(e){
+	 	// likely an advert is using the same id :(
+	 	// how can you not want to use an adblocker on this site?
+	 }
 });
 
 $('.active').on('click', function(){
