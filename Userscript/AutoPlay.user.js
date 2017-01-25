@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        KissAnime Auto Play Next Episode
 // @description Automatically plays the next video in the list without ever leaving fullscreen mode! Works on Kissanime/kisscartoon/kissasian
-// @icon        http://kissanime.to/Content/images/favicon.ico
+// @icon        http://kissanime.ru/Content/images/favicon.ico
 // @locale      en
 // @namespace   matthewmarillac.com
 // @author      Matthew James de Marillac
@@ -15,7 +15,7 @@
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @supportURL  https://github.com/mattmarillac/kissanime-userscript/issues
-// @version     1.7.4.1
+// @version     1.7.4.2
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -383,6 +383,7 @@ function createButton(){	//create a form for user to submit skip time
 function createOverlay(){
 	createButton();
 	$("#selectPlayer").parent().hide();		//remove select player - flash not supported!
+	$('.vjs-live-controls.vjs-control').append($('#btnNext').parent().clone()) //copy next button to video bar
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
 	$("body").append(templates.innerstyle());
 	editMessage(templates.ol());
