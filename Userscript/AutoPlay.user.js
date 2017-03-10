@@ -235,7 +235,7 @@ function getNextUrl(currentUrl){   //get the next videos url from an ajax reques
 
 function skipStart(){
 	//Skip start credits if set
-	        if(skipFromStart != null && typeof skipFromStart != 'undefined'){
+	        if(skipFromStart !== null && typeof skipFromStart != 'undefined'){
 	            var seconds = timeToSeconds(skipFromStart);
 	            video.currentTime = seconds;
 	        }
@@ -469,7 +469,7 @@ function createButton(){	//create a form for user to submit skip time
 function createOverlay(){
 	createButton();
 	$("#selectPlayer").parent().hide();		//remove select player - flash not supported!
-	$('.vjs-live-controls.vjs-control').append($('#btnNext').parent().clone()) //copy next button to video bar
+	$('.vjs-live-controls.vjs-control').append($('#btnNext').parent().clone()); //copy next button to video bar
 	$(videoPlaceholder).prepend("<div class='overlay' id='overlay'></div>");
 	$("body").append(templates.innerstyle());
 	editMessage(templates.ol());
