@@ -15,7 +15,7 @@
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @supportURL  https://github.com/mattmarillac/kissanime-userscript/issues
-// @version     1.7.4.2
+// @version     1.8
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -24,6 +24,7 @@
 
 var Url; //global variables
 var skipFrom;
+var skipFromStart;
 var itr = false;
 var active = true;
 var params = window.location.pathname.split('/').slice(1);
@@ -51,6 +52,14 @@ $("#skipFromSubmit").on('click', function (event) {       //when video is ready 
 
 $("#removeSkip").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
 	removeStorage();
+});
+
+$("#skipFromStartSubmit").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+	setStartStorage();
+});
+
+$("#removeSkipFromStart").on('click', function (event) {       //when video is ready to play add poster - prevents overlaping with default initial loading icon
+	removeStartStorage();
 });
 
 function buttonFeedback(){
@@ -113,7 +122,8 @@ $(video).on('ended',function()
 
 function templates(){
     var ol = _.template("<div class='card-content white-text'><p>Thanks for using <a class='teal-text' href='http://www.matthewmarillac.com/api/anime.php' target='_BLANK'>Kissanime Autoplayer</a>. Be sure to leave a rating if you enjoy using it!</p>"+
-                        '<!-- Switch --> <div class="switch"> <label> Off <input type="checkbox"> <span class="lever"></span> On </label> </div>' +
+                        "<p>Select a time to skip start from:</p> <input class='white-text' id='skipFromStart' placeholder='05:30'/>" +
+                        "<button class='waves-effect waves-light btn' id='skipFromStartSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkipFromStart'>Remove</button></div>"+
                         "<p>Select a time to skip credits from:</p> <input class='white-text' id='skipFrom' placeholder='30:20'/>" +
                         "<button class='waves-effect waves-light btn' id='skipFromSubmit'>Submit</button>  <button class='waves-effect waves-light btn' id='removeSkip'>Remove</button></div>");
     var bar = _.template("<div id='skip-ol' style='float:right;' class='vjs-control'><img style='height: 100%;' src='<%= icon %>'/></div>");
@@ -172,7 +182,10 @@ function nextVideo(url){
 			video.src = window.atob(_.escape($(select).val()));       //base 64 decode extracted url and play src
 		}
 			video.play();
+
 			document.getElementById("selectEpisode").selectedIndex++;       //increment current episode selection in episode select dropdown
+
+			skipStart();
 		},
 		error: function (xhr, status, error) {
 			// error in ajax
@@ -218,6 +231,14 @@ function getNextUrl(currentUrl){   //get the next videos url from an ajax reques
 			}
 		 });
 	}
+}
+
+function skipStart(){
+	//Skip start credits if set
+	        if(skipFromStart != null && typeof skipFromStart != 'undefined'){
+	            var seconds = timeToSeconds(skipFromStart);
+	            video.currentTime = seconds;
+	        }
 }
 
 function findResolution(option){
@@ -280,7 +301,7 @@ function resume(){
 		return;
 	}
 	//if current video time matches stored skipping time trigger video ended event handler
-	if(getTime(video.currentTime) === skipFrom && itr === false){
+	if(getTime(video.currentTime) == skipFrom && itr === false){
 		itr = true;
 		getNextInQue();
 	}else{
@@ -290,6 +311,20 @@ function resume(){
 
 }
 //->End loop
+
+function timeToSeconds(time){
+	var a = time.split(':'); // split it at the colons
+	var seconds;
+	
+	if(a.length === 2){
+		seconds = ((+a[0]) * 60 + (+a[1])); 
+	}
+	else{
+		// minutes are worth 60 seconds. Hours are worth 60 minutes.
+		seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+	}
+	return seconds;
+}
 
 function getTime(totalSec){	//convert video play time(float) to timestamp
 	var minutes = parseInt( totalSec / 60 ) % 60;
@@ -332,11 +367,62 @@ function setStorage(){	//user has clicked on button save credit skip time in loc
 	}
 }
 
+//->DB
+function getStartStorage(){	
+	try{	//get the stored skip time from local storage if set
+		if(typeof(Storage) !== "undefined") {
+			skipFromStart = localStorage.getItem(animeName+"_skipFromStart");
+			$("#skipFromStart").val(skipFromStart);
+          
+	        skipStart();
+        }
+	}catch(e)
+	{
+		console.log("Local storage not found");
+	}
+}
+
 function removeStorage(){
 	try{
 		localStorage.removeItem(animeName+"_skipFrom");
 		skipFrom = null;
 		getStorage();
+		$("#skipFrom").val("");
+		buttonFeedback();
+	}catch(e)
+	{
+		console.log("Local storage not found");
+	}
+}
+
+function setStartStorage(){	//user has clicked on button save credit skip time in local storage
+	try{
+		if(typeof(Storage) !== "undefined") {
+			skipFromStart = $("#skipFromStart").val();
+			//check for valid input
+			if(skipFromStart.match('^[0-5][0-9]:[0-5][0-9]$') || skipFromStart.match('^[0-9]:[0-5][0-9]:[0-5][0-9]$')){
+			//store entered time in local storage
+				buttonFeedback();
+				localStorage.setItem(animeName+"_skipFromStart", skipFromStart);
+			}
+			else{
+				$("#skipFromStart").val();
+				$("#skipFromStart").val('Invalid Number: format is h:mm:ss');
+				_.delay(function() { $("#skipFromStart").val(''); }, 3000);
+			}
+		}
+	}catch(e)
+	{
+		console.log(e);
+	}
+}
+
+function removeStartStorage(){
+	try{
+		localStorage.removeItem(animeName+"_skipFromStart");
+		skipFromStart = null;
+		getStorage();
+		$("#skipFromStart").val("");
 		buttonFeedback();
 	}catch(e)
 	{
@@ -389,6 +475,7 @@ function createOverlay(){
 	editMessage(templates.ol());
 	hideMessage();
 	getStorage();
+	getStartStorage();
     getResolution();
 }
 
@@ -417,4 +504,3 @@ function dailyIcon(){
 	        return "https://raw.githubusercontent.com/mattmarillac/kissanime-userscript/master/Userscript/bar_icon2.png";
 	}
 }
-
