@@ -33,6 +33,13 @@ module.exports = function(grunt) {
 							}
 				 }
 		},
+		uglify: {
+		    my_target: {
+		      files: {
+		        'Chrome Extension/bundle.js': ['bower_components/underscore/underscore-min.js', 'Chrome Extension/AutoPlay.js']
+		      }
+		    }
+  		},
 	copy: {
 			main: {
 			 files: [
@@ -57,7 +64,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.registerTask('default', ['copy', 'compass', 'jshint']);
 	grunt.registerTask('dev', ['jshint']);
 	grunt.registerTask('build', ['copy', 'compass']);
+	grunt.registerTask('copy', ['copy']);
+	grunt.registerTask('min', ['uglify']);
 };
