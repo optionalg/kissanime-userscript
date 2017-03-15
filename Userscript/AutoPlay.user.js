@@ -15,7 +15,7 @@
 // @require     https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
 // @resource    materialize https://cdn.rawgit.com/mattmarillac/kissanime-userscript/master/Userscript/materialize.css
 // @supportURL  https://github.com/mattmarillac/kissanime-userscript/issues
-// @version     1.8
+// @version     2.0.1
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -34,6 +34,7 @@ var videoPlaceholder = document.getElementById('divContentVideo');  //get curren
 if(typeof videoPlaceholder !== 'undefined' && videoPlaceholder !== 'null'){
 var ref;
 var video = (ref = videoPlaceholder.getElementsByTagName('video')) !== null ? ref[0] : void 0;  //get element video from previous elements child
+var errorState = false;
 
 //create interface
 var style = GM_getResourceText ("materialize");
@@ -72,8 +73,8 @@ $("#skip-ol").on('click', function (event) {       //when video is ready to play
 	event.stopPropagation();
 });
 
-$('#selectQuality').on('change', function(e) {
-  quality = $("#selectQuality option:selected").html();
+$('#divQuality').on('change', function(e) {
+  quality = $("#divQuality option:selected").html();
   setResolution(quality);
 });
 
@@ -168,18 +169,18 @@ function nextVideo(url){
 		success: function (response)
 		{
 			var select;
-			var res = findResolution($(response).find('#selectQuality option'));
+			var res = findResolution($(response).find('#divQuality option'));
 			if(res !== false && typeof res !== 'undefined' && res !== null){
 				select = $(res);
 			}
 			else{
-				select = $(response).find('#selectQuality option')[0];
+				select = $(response).find('#divQuality option')[0];
 			}
 			    //get next video in encoded form from quality dropdown value
 		if (OnKissCartoon()) {
 			video.src = $kissenc.decrypt(_.escape($(select).val()));     //decodes using kisscartoon's decoder
 		}else{
-			video.src = window.atob(_.escape($(select).val()));       //base 64 decode extracted url and play src
+			video.src = ovelWrap(_.escape($(select).val()));       //base 64 decode extracted url and play src
 		}
 			video.play();
 
@@ -189,13 +190,27 @@ function nextVideo(url){
 		},
 		error: function (xhr, status, error) {
 			// error in ajax
-			console.log(error);
+			editMessage('<p>Conectivity issue: trying to load video again in 3 seconds</p>');
+			
 			setTimeout ( function(){ nextVideo(url); }, $.ajaxSetup().retryAfter );
+			
+			errorState = true;
 		}
 		});
+
+		if(errorState){
+
+			editMessage(templates.ol());
+			
+			var overlay= document.getElementById('overlay');
+			overlay.style.visibility= 'hidden';
+
+			errorState = false;
+		}
 }
 
 function getNextUrl(currentUrl){   //get the next videos url from an ajax request by reading href of next link on that page
+
 	if(currentUrl == "init")
 	{//this is the first video in the que - get the next page from current page link
 			var element = document.getElementById('btnNext').parentNode;    //get url of next video from button href
@@ -227,9 +242,22 @@ function getNextUrl(currentUrl){   //get the next videos url from an ajax reques
 			error: function (xhr, status, error) {
 				// error in ajax
 				console.log(error);
+				editMessage('<p>Conectivity issue: trying to load video again in 3 seconds</p>');
+				errorState = true;
 				setTimeout ( function(){ getNextUrl(currentUrl); }, $.ajaxSetup().retryAfter );
+			
 			}
 		 });
+		 console.log(errorState);
+		 if(errorState){
+
+			editMessage(templates.ol());
+			
+			var overlay= document.getElementById('overlay');
+			overlay.style.visibility= 'hidden';
+
+			errorState = false;
+		}
 	}
 }
 
@@ -434,8 +462,8 @@ function getResolution(){
 	try{	//get the stored skip time from local storage if set
 		if(typeof(Storage) !== "undefined") {
 			var stor = localStorage.getItem(animeName+"_quality");
-			var res = $('#selectQuality option');
-            $('#selectQuality option:selected').removeAttr('selected');
+			var res = $('#divQuality option');
+            $('#divQuality option:selected').removeAttr('selected');
             _.each(res, function(opt){
                 if($(opt).text() === stor)
                 $(opt).attr('selected', '');
