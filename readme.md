@@ -1,4 +1,4 @@
-##KissAnime Next Video Autoplayer
+## KissAnime Next Video Autoplayer
 
 **Main script found in /Userscript/Autoplay.user.js**
 
