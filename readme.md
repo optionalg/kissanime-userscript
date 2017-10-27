@@ -1,5 +1,7 @@
 ## KissAnime Next Video Autoplayer
 
+[Download](https://greasyfork.org/en/scripts/16504-kissanime-auto-play-next-episode)
+
 **Main script found in /Userscript/Autoplay.user.js**
 
 Extensions use this^ script through grunt build
