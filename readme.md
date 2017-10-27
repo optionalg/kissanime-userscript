@@ -1,4 +1,9 @@
 ##KissAnime Next Video Autoplayer
+
+**Main script found in /Userscript/Autoplay.user.js**
+
+Extensions use this^ script through grunt build
+
 User Script for Kissanime and packaged browser extensions.
 Plays the next video in the list automatically when the previous video is finished.
 
